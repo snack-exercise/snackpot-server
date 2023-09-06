@@ -26,7 +26,7 @@ dependencies {
     // jwt
     implementation 'com.auth0:java-jwt:4.2.1'
     // Spring Data Redis
-    implementation 'org.springframework.boot:spring-boot-starter-data-redis'
+ㅇ    // implementation 'org.springframework.boot:spring-boot-starter-data-redis'
     // firebase
     implementation 'com.google.firebase:firebase-admin:9.1.1'
     // validation
