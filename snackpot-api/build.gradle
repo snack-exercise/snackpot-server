@@ -1,0 +1,52 @@
+plugins {
+    id 'java'
+}
+
+group = 'com.soma'
+version = '0.0.1-SNAPSHOT'
+
+repositories {
+    mavenCentral()
+}
+
+
+dependencies {
+    testImplementation platform('org.junit:junit-bom:5.9.1')
+    testImplementation 'org.junit.jupiter:junit-jupiter'
+    // OAuth
+    implementation 'org.springframework.boot:spring-boot-starter-oauth2-client'
+    // Spring Security
+    implementation 'org.springframework.boot:spring-boot-starter-security'
+    // Swagger
+    implementation 'org.springdoc:springdoc-openapi-starter-webmvc-ui:2.0.2'
+    // Web
+    implementation 'org.springframework.boot:spring-boot-starter-web'
+    // security test
+    testImplementation 'org.springframework.security:spring-security-test'
+    // jwt
+    implementation 'com.auth0:java-jwt:4.2.1'
+    // Spring Data Redis
+    implementation 'org.springframework.boot:spring-boot-starter-data-redis'
+    // firebase
+    implementation 'com.google.firebase:firebase-admin:9.1.1'
+    // validation
+    implementation 'org.springframework.boot:spring-boot-starter-validation'
+    // flyway
+    implementation 'org.flywaydb:flyway-core'
+    // snackpot-common 모듈
+    implementation project(':snackpot-common')
+}
+
+test {
+    useJUnitPlatform()
+}
+
+// 실제로 실행 가능한 jar 파일이 빌드되어야함
+bootJar {
+    enabled = true
+}
+
+jar {
+    enabled = true
+}
+
