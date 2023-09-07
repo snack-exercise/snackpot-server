@@ -1,0 +1,18 @@
+spring:
+  profiles:
+    group:
+      local-env:
+        - local
+      dev-env:
+        - dev
+      prod-blue-env:
+        - prod
+        - blue
+      prod-green-env:
+        - prod
+        - green
+    include:
+      - jwt
+      - oauth
+      - fcm
+      - sentry
