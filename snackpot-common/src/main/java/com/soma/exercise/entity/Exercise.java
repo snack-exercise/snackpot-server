@@ -26,7 +26,7 @@ public class Exercise {
     @Enumerated(EnumType.STRING)
     private Level level;
 
-    private String effective;
+    private String effect;
 
     private String title;
 
@@ -35,12 +35,12 @@ public class Exercise {
     private Integer timeSpent;
 
     @Builder
-    public Exercise(Youtuber youtuber, String videoId, Integer calories, Level level, String effective, String title, String thumbnail, Integer timeSpent) {
+    public Exercise(Youtuber youtuber, String videoId, Integer calories, Level level, String effect, String title, String thumbnail, Integer timeSpent) {
         this.youtuber = youtuber;
         this.videoId = videoId;
         this.calories = calories;
         this.level = level;
-        this.effective = effective;
+        this.effect = effect;
         this.title = title;
         this.thumbnail = thumbnail;
         this.timeSpent = timeSpent;
