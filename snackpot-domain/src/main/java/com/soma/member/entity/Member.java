@@ -21,12 +21,12 @@ public class Member extends BaseEntity {
 
     private String profileImg;
 
+    private String fcmToken;
+
     private String password;
 
     @Enumerated(EnumType.STRING)
     private RoleType roleType;
-
-    private String fcmToken;
 
     @Builder
     public Member(String email, String name, Integer dailyGoalTime) {
