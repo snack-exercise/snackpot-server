@@ -19,8 +19,6 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-security'
     // Swagger
     implementation 'org.springdoc:springdoc-openapi-starter-webmvc-ui:2.0.2'
-    // Web
-    implementation 'org.springframework.boot:spring-boot-starter-web'
     // security test
     testImplementation 'org.springframework.security:spring-security-test'
     // jwt
@@ -29,12 +27,8 @@ dependencies {
     // implementation 'org.springframework.boot:spring-boot-starter-data-redis'
     // firebase
     implementation 'com.google.firebase:firebase-admin:9.1.1'
-    // validation
-    implementation 'org.springframework.boot:spring-boot-starter-validation'
-    // flyway
-    implementation 'org.flywaydb:flyway-core'
-    // snackpot-common 모듈
-    implementation project(':snackpot-common')
+    // snackpot-domain 모듈
+    implementation project(':snackpot-domain')
 }
 
 test {
