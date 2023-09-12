@@ -1,5 +1,6 @@
 package com.soma.exercise.entity;
 
+import com.soma.common.BaseEntity;
 import com.soma.youtuber.entity.Youtuber;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
@@ -10,7 +11,7 @@ import lombok.NoArgsConstructor;
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Entity
-public class Exercise {
+public class Exercise extends BaseEntity {
     // todo : 시퀀스 생각해보기
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
