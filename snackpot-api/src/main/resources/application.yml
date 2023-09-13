@@ -16,3 +16,37 @@ spring:
       - oauth
       - fcm
       - sentry
+
+---
+spring:
+  config:
+    activate:
+      on-profile: test
+
+#  h2:
+#    console:
+#      enabled: true
+#      path: /h2-console
+#
+#  datasource:
+#    driver-class-name: org.h2.Driver
+#    url: jdbc:h2:tcp://localhost/./snackpot;MODE=MySQL;
+#    username: SA
+
+  jpa:
+    hibernate:
+      ddl-auto: create
+    show-sql: true
+    properties:
+      hibernate:
+        format_sql: true
+
+  sql:
+    init:
+      mode: never
+
+logging:
+  level:
+    #    org.springframework.orm.jpa: DEBUG
+    #    org.springframework.transaction: DEBUG
+    org.springframework.test.context.transaction: DEBUG # test시, 트랜잭션 시작 종료 로그 확인을 위해
