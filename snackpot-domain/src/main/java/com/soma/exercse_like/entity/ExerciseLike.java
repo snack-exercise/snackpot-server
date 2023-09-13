@@ -1,4 +1,4 @@
-package com.soma.exercise_member_like.entity;
+package com.soma.exercse_like.entity;
 
 import com.soma.common.BaseEntity;
 import com.soma.exercise.entity.Exercise;
@@ -11,7 +11,7 @@ import lombok.NoArgsConstructor;
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Entity
-public class ExerciseMemberLike extends BaseEntity {
+public class ExerciseLike extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
