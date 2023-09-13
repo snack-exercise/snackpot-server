@@ -17,10 +17,9 @@ import org.springframework.data.domain.SliceImpl;
 
 import java.util.List;
 
-import static com.soma.bodypart.entity.QBodyPart.bodyPart;
 import static com.soma.exercise.entity.QExercise.exercise;
 import static com.soma.exercise_bodypart.entity.QExerciseBodyPart.exerciseBodyPart;
-import static com.soma.exercise_member_like.entity.QExerciseMemberLike.exerciseMemberLike;
+import static com.soma.exercse_like.entity.QExerciseLike.exerciseLike;
 import static com.soma.youtuber.entity.QYoutuber.youtuber;
 
 @RequiredArgsConstructor
@@ -35,11 +34,15 @@ public class ExerciseRepositoryImpl implements ExerciseRepositoryCustom {
                         exercise.title,
                         youtuber.name.as("youtuberName"),
                         exercise.timeSpent,
+//                        JPAExpressions
+//                                .select(bodyPart.bodyPartType)
+//                                .from(bodyPart)
+//                                .innerJoin(exerciseBodyPart).on(bodyPart.id.eq(exerciseBodyPart.bodyPart.id))
+//                                .where(exerciseBodyPart.exercise.id.eq(exercise.id)),
                         JPAExpressions
-                                .select(bodyPart.bodyPartType)
-                                .from(bodyPart)
-                                .innerJoin(exerciseBodyPart).on(bodyPart.id.eq(exerciseBodyPart.id))
-                                .where(exerciseBodyPart.exercise.id.eq(exercise.id)),
+                                .select(exerciseBodyPart.bodyPart.bodyPartType)
+                                .from(exerciseBodyPart)
+                                .innerJoin(exercise).on(exerciseBodyPart.exercise.id.eq(exercise.id)),
                         exercise.calories,
                         exercise.level
                 ))
@@ -48,7 +51,7 @@ public class ExerciseRepositoryImpl implements ExerciseRepositoryCustom {
                 .leftJoin(exerciseBodyPart).on(exercise.id.eq(exerciseBodyPart.exercise.id));
 
         if (email != null) {
-            query.leftJoin(exerciseMemberLike).on(exercise.id.eq(exerciseMemberLike.exercise.id));
+            query.leftJoin(exerciseLike).on(exercise.id.eq(exerciseLike.exercise.id));
         }
 
         List<ExerciseResponse> results = query.where(eqBodyPartTypes(exerciseReadCondition.getBodyPartTypes()))
@@ -88,7 +91,7 @@ public class ExerciseRepositoryImpl implements ExerciseRepositoryCustom {
 
     private BooleanExpression eqLike(Boolean like, String email) {
         if (like != null) {
-            return exerciseMemberLike.member.email.eq(email);
+            return exerciseLike.member.email.eq(email);
         }
         return null;
     }
