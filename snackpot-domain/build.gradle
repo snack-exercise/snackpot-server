@@ -38,7 +38,7 @@ dependencies {
     api "com.querydsl:querydsl-jpa:${queryDslVersion}:jakarta"
     api "com.querydsl:querydsl-apt:${queryDslVersion}:jakarta"
     api "jakarta.annotation:jakarta.annotation-api"
-    api "jakarta.persistence:jakarta.persistence-api"                // (3)
+    api "jakarta.persistence:jakarta.persistence-api"
 
 }
 
