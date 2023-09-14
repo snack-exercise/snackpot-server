@@ -2,7 +2,12 @@ package com.soma.group.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.soma.group.dto.request.GroupCreateRequest;
+import com.soma.group.dto.request.GroupJoinRequest;
+import com.soma.group.factory.dto.GroupCreateFactory;
+import com.soma.group.factory.entity.GroupFactory;
+import com.soma.group.factory.fixtures.GroupFixtures;
 import com.soma.group.repository.GroupRepository;
+import com.soma.joinList.repository.JoinListRepository;
 import com.soma.member.factory.entity.MemberFactory;
 import com.soma.member.repository.MemberRepository;
 import org.junit.jupiter.api.BeforeEach;
@@ -42,6 +47,8 @@ public class GroupControllerIntegrationTest {
     private GroupRepository groupRepository;
     @Autowired
     private MemberRepository memberRepository;
+    @Autowired
+    private JoinListRepository joinListRepository;
 //    @Autowired
 //    private TestInitDB initDB;
     @Autowired
@@ -80,6 +87,31 @@ public class GroupControllerIntegrationTest {
                 .andDo(print());
 
         int afterSize = groupRepository.findAll().size();
+        assertThat(afterSize).isEqualTo(beforeSize + 1);
+    }
+
+    @Test
+    @DisplayName("그룹을 가입한다.")
+    @WithMockUser(username = "test@naver.com")
+    void joinTest() throws Exception {
+        //given
+        GroupJoinRequest request = GroupCreateFactory.createGroupJoinRequest();
+        groupRepository.save(GroupFactory.createGroup());
+        int beforeSize = joinListRepository.findAll().size();
+
+        //when //then
+        mockMvc.perform(
+                        post("/groups/join")
+                                .content(objectMapper.writeValueAsString(request))
+                                .contentType(MediaType.APPLICATION_JSON)
+                )
+                .andExpect(status().isCreated())
+                .andExpect(jsonPath("$.success").value("true"))
+                .andExpect(jsonPath("$.code").value("0"))
+                .andExpect(jsonPath("$.result.data.groupName").value(GroupFixtures.그룹명))
+                .andDo(print());
+
+        int afterSize = joinListRepository.findAll().size();
         assertThat(afterSize).isEqualTo(beforeSize + 1);
     }
 }
