@@ -6,7 +6,6 @@ import com.soma.group.repository.GroupRepository;
 import com.soma.member.entity.Member;
 import com.soma.member.repository.MemberRepository;
 import com.soma.notification.dto.request.MemberUpdateFcmTokenRequest;
-import com.soma.notification.dto.request.SendManualReminderRequest;
 import com.soma.notification.dto.response.MemberUpdateFcmTokenResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
