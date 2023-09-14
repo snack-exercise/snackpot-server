@@ -2,7 +2,7 @@ package com.soma.group.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.soma.advice.ExceptionAdvice;
-import com.soma.exception.MemberNotFoundException;
+import com.soma.exception.member.MemberNotFoundException;
 import com.soma.group.dto.request.GroupCreateRequest;
 import com.soma.group.factory.dto.GroupCreateFactory;
 import com.soma.group.service.GroupService;

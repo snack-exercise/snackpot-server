@@ -1,6 +1,6 @@
 package com.soma.advice;
 
-import com.soma.exception.MemberNotFoundException;
+import com.soma.exception.member.MemberNotFoundException;
 import com.soma.util.response.Response;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
