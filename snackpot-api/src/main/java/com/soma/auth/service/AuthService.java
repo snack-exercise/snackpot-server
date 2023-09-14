@@ -9,6 +9,7 @@ import com.soma.common.constant.Status;
 import com.soma.exception.MemberNicknameAlreadyExistsException;
 import com.soma.exception.MemberNotFoundException;
 import com.soma.member.entity.Member;
+import com.soma.member.entity.RoleType;
 import com.soma.member.repository.MemberRepository;
 import com.soma.notification.service.NotificationService;
 import com.soma.security.jwt.service.JwtService;
@@ -35,6 +36,7 @@ public class AuthService {
                 .email(email)
                 .name(request.getName())
                 .dailyGoalTime(request.getDailyGoalTime())
+                .roleType(RoleType.USER)
                 .build();
         // fcm 토큰 저장
         member.updateFcmToken(request.getFcmToken());

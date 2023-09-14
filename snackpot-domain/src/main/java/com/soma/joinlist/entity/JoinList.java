@@ -3,10 +3,9 @@ package com.soma.joinlist.entity;
 import com.soma.group.entity.Group;
 import com.soma.member.entity.Member;
 import jakarta.persistence.*;
-import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
+
+import static com.soma.joinlist.entity.JoinType.*;
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -25,4 +24,28 @@ public class JoinList {
 
     @Enumerated(EnumType.STRING)
     private JoinType joinType;
+
+    @Builder
+    public JoinList(Member member, Group group, JoinType joinType) {
+        this.member = member;
+        this.group = group;
+        this.joinType = joinType;
+    }
+
+    public static JoinList createHostJoinList(Member member, Group group){
+        return JoinList.builder()
+                .member(member)
+                .group(group)
+                .joinType(HOST)
+                .build();
+    }
+
+    public static JoinList createMemberJoinList(Member member, Group group){
+        return JoinList.builder()
+                .member(member)
+                .group(group)
+                .joinType(HOST)
+                .build();
+    }
+
 }

@@ -2,10 +2,7 @@ package com.soma.group.entity;
 
 import com.soma.common.BaseEntity;
 import jakarta.persistence.*;
-import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.time.LocalDate;
 
@@ -24,4 +21,14 @@ public class Group extends BaseEntity {
     private LocalDate startDate; // 시작 기간
 
     private String code; // 그룹 입장 코드
+
+    @Builder
+    public Group(String name, LocalDate startDate, String code) {
+        this.name = name;
+        this.startDate = startDate;
+        this.code = code;
+        active();
+    }
+
+
 }

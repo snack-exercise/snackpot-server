@@ -37,7 +37,7 @@ public class SecurityConfig {
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(request -> request.requestMatchers(
                                 "/mvp/auth/login", "/mvp/auth/sign-up", "/error", "/swagger-ui/**", "/swagger-resources/**", "/v3/api-docs/**", "/css/**", "/images/**", "/js/**", "/favicon.ico", "/h2-console/**",
-                                "/api/sign-up", "/api/auth/**", "/health", "missions/random/non-member", "/profiles").permitAll()
+                                "/auth/**", "/health", "missions/random/non-member", "/profiles").permitAll()
                         .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
                         .anyRequest().authenticated())
                 .addFilterAfter(jwtAuthenticationProcessingFilter(), LogoutFilter.class)
