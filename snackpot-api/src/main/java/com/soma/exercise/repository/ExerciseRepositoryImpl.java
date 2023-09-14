@@ -14,6 +14,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Slice;
 import org.springframework.data.domain.SliceImpl;
+import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
@@ -23,6 +24,7 @@ import static com.soma.exercse_like.entity.QExerciseLike.exerciseLike;
 import static com.soma.youtuber.entity.QYoutuber.youtuber;
 
 @RequiredArgsConstructor
+@Repository
 public class ExerciseRepositoryImpl implements ExerciseRepositoryCustom {
     private final JPAQueryFactory jpaQueryFactory;
     @Override
