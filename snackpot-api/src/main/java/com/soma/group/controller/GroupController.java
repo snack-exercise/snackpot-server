@@ -1,6 +1,7 @@
 package com.soma.group.controller;
 
 import com.soma.group.dto.request.GroupCreateRequest;
+import com.soma.group.dto.request.GroupJoinRequest;
 import com.soma.group.service.GroupService;
 import com.soma.util.response.Response;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -23,6 +24,12 @@ public class GroupController {
     @PostMapping()
     public Response create(@RequestBody GroupCreateRequest request, @AuthenticationPrincipal UserDetails loginUser){
         return Response.success(groupService.create(request, loginUser.getUsername()));
+    }
+
+    @ResponseStatus(HttpStatus.CREATED)
+    @PostMapping("/join")
+    public Response join(@RequestBody GroupJoinRequest request, @AuthenticationPrincipal UserDetails loginUser){
+        return Response.success(groupService.join(request, loginUser.getUsername()));
     }
 
 }

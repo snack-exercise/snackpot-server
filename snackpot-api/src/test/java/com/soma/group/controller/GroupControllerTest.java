@@ -2,8 +2,10 @@ package com.soma.group.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.soma.group.dto.request.GroupCreateRequest;
-import com.soma.group.dto.response.GroupCreateResponse;
+import com.soma.group.dto.request.GroupJoinRequest;
+import com.soma.group.dto.response.GroupNameResponse;
 import com.soma.group.factory.dto.GroupCreateFactory;
+import com.soma.group.factory.fixtures.GroupFixtures;
 import com.soma.group.service.GroupService;
 import com.soma.member.factory.fixtures.MemberFixtures;
 import com.soma.security.TestUserArgumentResolver;
@@ -18,8 +20,7 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
@@ -49,7 +50,7 @@ class GroupControllerTest {
     void create() throws Exception {
         //given
         GroupCreateRequest request = GroupCreateFactory.createGroupCreateRequest();
-        GroupCreateResponse response = new GroupCreateResponse(request.getGroupName());
+        GroupNameResponse response = new GroupNameResponse(request.getGroupName());
 //        when(groupService.create(request, MemberFixtures.이메일)).thenReturn(response); // todo 왜 이건 안되는거지....?
         when(groupService.create(any(), eq(MemberFixtures.이메일))).thenReturn(response);
 
@@ -64,6 +65,28 @@ class GroupControllerTest {
                 .andExpect(jsonPath("$.success").value("true"))
                 .andExpect(jsonPath("$.code").value("0"))
                 .andExpect(jsonPath("$.result.data.groupName").value(request.getGroupName()))
+                .andDo(print());
+    }
+
+    @Test
+    @DisplayName("그룹에 가입한다.")
+    void join() throws Exception {
+        //given
+        GroupJoinRequest request = GroupCreateFactory.createGroupJoinRequest();
+        GroupNameResponse response = new GroupNameResponse(GroupFixtures.그룹명);
+//        when(groupService.create(request, MemberFixtures.이메일)).thenReturn(response); // todo 왜 이건 안되는거지....?
+        when(groupService.join(any(), anyString())).thenReturn(response);
+
+        //when //then
+        mockMvc.perform(
+                        post("/groups/join")
+                                .content(objectMapper.writeValueAsString(request))
+                                .contentType(MediaType.APPLICATION_JSON)
+                )
+                .andExpect(status().isCreated())
+                .andExpect(jsonPath("$.success").value("true"))
+                .andExpect(jsonPath("$.code").value("0"))
+                .andExpect(jsonPath("$.result.data.groupName").value(GroupFixtures.그룹명))
                 .andDo(print());
     }
 

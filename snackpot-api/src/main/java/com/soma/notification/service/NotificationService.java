@@ -1,7 +1,7 @@
 package com.soma.notification.service;
 
 
-import com.soma.exception.MemberNotFoundException;
+import com.soma.exception.member.MemberNotFoundException;
 import com.soma.group.repository.GroupRepository;
 import com.soma.member.entity.Member;
 import com.soma.member.repository.MemberRepository;
