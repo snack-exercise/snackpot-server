@@ -3,6 +3,7 @@ package com.soma.domain.youtuber.entity;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -20,4 +21,12 @@ public class Youtuber {
     private String name;
 
     private String profileImg;
+
+    @Builder
+    public Youtuber(String channelId, String description, String name, String profileImg) {
+        this.channelId = channelId;
+        this.description = description;
+        this.name = name;
+        this.profileImg = profileImg;
+    }
 }
