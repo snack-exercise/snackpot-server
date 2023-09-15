@@ -1,4 +1,4 @@
-package com.soma.group.factory.fixtures;
+package com.soma.domain.group.factory.fixtures;
 
 public class GroupFixtures {
     public static String 그룹코드 = "123456";

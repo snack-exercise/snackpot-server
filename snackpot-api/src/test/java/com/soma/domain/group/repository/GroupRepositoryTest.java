@@ -1,9 +1,8 @@
-package com.soma.group.repository;
+package com.soma.domain.group.repository;
 
 import com.soma.config.QueryDSLConfig;
-import com.soma.domain.group.repository.GroupRepository;
+import com.soma.domain.group.factory.entity.GroupFactory;
 import com.soma.domain.group.entity.Group;
-import com.soma.group.factory.entity.GroupFactory;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

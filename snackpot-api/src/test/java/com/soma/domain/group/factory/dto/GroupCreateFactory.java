@@ -1,8 +1,8 @@
-package com.soma.group.factory.dto;
+package com.soma.domain.group.factory.dto;
 
 import com.soma.domain.group.dto.request.GroupCreateRequest;
 import com.soma.domain.group.dto.request.GroupJoinRequest;
-import com.soma.group.factory.fixtures.GroupFixtures;
+import com.soma.domain.group.factory.fixtures.GroupFixtures;
 
 public class GroupCreateFactory {
     public static GroupCreateRequest createGroupCreateRequest(){

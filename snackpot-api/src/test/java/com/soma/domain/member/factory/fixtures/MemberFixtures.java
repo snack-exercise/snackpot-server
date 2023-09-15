@@ -1,4 +1,4 @@
-package com.soma.member.factory.fixtures;
+package com.soma.domain.member.factory.fixtures;
 
 import com.soma.domain.member.entity.RoleType;
 

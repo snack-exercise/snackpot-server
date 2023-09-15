@@ -1,7 +1,7 @@
-package com.soma.group.factory.entity;
+package com.soma.domain.group.factory.entity;
 
 import com.soma.domain.group.entity.Group;
-import com.soma.group.factory.fixtures.GroupFixtures;
+import com.soma.domain.group.factory.fixtures.GroupFixtures;
 
 import java.time.LocalDate;
 

@@ -1,14 +1,13 @@
-package com.soma.joinlist.repository;
+package com.soma.domain.joinlist.repository;
 
 import com.soma.config.QueryDSLConfig;
 import com.soma.domain.group.entity.Group;
-import com.soma.group.factory.entity.GroupFactory;
+import com.soma.domain.group.factory.entity.GroupFactory;
+import com.soma.domain.member.factory.entity.MemberFactory;
 import com.soma.domain.group.repository.GroupRepository;
-import com.soma.domain.joinlist.repository.JoinListRepository;
 import com.soma.domain.joinlist.entity.JoinList;
 import com.soma.domain.joinlist.entity.JoinType;
 import com.soma.domain.member.entity.Member;
-import com.soma.member.factory.entity.MemberFactory;
 import com.soma.domain.member.repository.MemberRepository;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.DisplayName;

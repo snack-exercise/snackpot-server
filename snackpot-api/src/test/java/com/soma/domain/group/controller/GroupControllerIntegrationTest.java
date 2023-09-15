@@ -1,14 +1,14 @@
-package com.soma.group.controller;
+package com.soma.domain.group.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.soma.domain.group.dto.request.GroupCreateRequest;
 import com.soma.domain.group.dto.request.GroupJoinRequest;
-import com.soma.group.factory.dto.GroupCreateFactory;
-import com.soma.group.factory.entity.GroupFactory;
-import com.soma.group.factory.fixtures.GroupFixtures;
+import com.soma.domain.group.factory.dto.GroupCreateFactory;
+import com.soma.domain.group.factory.entity.GroupFactory;
+import com.soma.domain.group.factory.fixtures.GroupFixtures;
+import com.soma.domain.member.factory.entity.MemberFactory;
 import com.soma.domain.group.repository.GroupRepository;
 import com.soma.domain.joinlist.repository.JoinListRepository;
-import com.soma.member.factory.entity.MemberFactory;
 import com.soma.domain.member.repository.MemberRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -24,7 +24,6 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.context.WebApplicationContext;
 
-import static com.soma.group.factory.dto.GroupCreateFactory.createGroupCreateRequest;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers.springSecurity;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -72,7 +71,7 @@ public class GroupControllerIntegrationTest {
     @WithMockUser(username = "test@naver.com")
     void createTest() throws Exception {
         //given
-        GroupCreateRequest request = createGroupCreateRequest();
+        GroupCreateRequest request = GroupCreateFactory.createGroupCreateRequest();
         int beforeSize = groupRepository.findAll().size();
 
         //when //then

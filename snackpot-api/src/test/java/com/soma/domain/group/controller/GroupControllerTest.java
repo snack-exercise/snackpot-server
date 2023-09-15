@@ -1,14 +1,13 @@
-package com.soma.group.controller;
+package com.soma.domain.group.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.soma.domain.group.controller.GroupController;
 import com.soma.domain.group.dto.request.GroupCreateRequest;
 import com.soma.domain.group.dto.request.GroupJoinRequest;
 import com.soma.domain.group.dto.response.GroupNameResponse;
-import com.soma.group.factory.dto.GroupCreateFactory;
-import com.soma.group.factory.fixtures.GroupFixtures;
+import com.soma.domain.group.factory.dto.GroupCreateFactory;
+import com.soma.domain.group.factory.fixtures.GroupFixtures;
+import com.soma.domain.member.factory.fixtures.MemberFixtures;
 import com.soma.domain.group.service.GroupService;
-import com.soma.member.factory.fixtures.MemberFixtures;
 import com.soma.security.TestUserArgumentResolver;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;

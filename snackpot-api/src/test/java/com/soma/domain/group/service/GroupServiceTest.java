@@ -1,14 +1,16 @@
-package com.soma.group.service;
+package com.soma.domain.group.service;
 
-import com.soma.domain.group.service.GroupService;
+import com.soma.domain.group.factory.dto.GroupCreateFactory;
+import com.soma.domain.group.factory.entity.GroupFactory;
+import com.soma.domain.group.factory.fixtures.GroupFixtures;
+import com.soma.domain.member.factory.entity.MemberFactory;
+import com.soma.domain.member.factory.fixtures.MemberFixtures;
 import com.soma.exception.group.AlreadyJoinedGroupException;
 import com.soma.domain.group.dto.request.GroupCreateRequest;
 import com.soma.domain.group.dto.request.GroupJoinRequest;
 import com.soma.domain.group.dto.response.GroupNameResponse;
-import com.soma.group.factory.fixtures.GroupFixtures;
 import com.soma.domain.group.repository.GroupRepository;
 import com.soma.domain.joinlist.repository.JoinListRepository;
-import com.soma.member.factory.fixtures.MemberFixtures;
 import com.soma.domain.member.repository.MemberRepository;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -19,10 +21,6 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.Optional;
 
-import static com.soma.group.factory.dto.GroupCreateFactory.createGroupCreateRequest;
-import static com.soma.group.factory.dto.GroupCreateFactory.createGroupJoinRequest;
-import static com.soma.group.factory.entity.GroupFactory.createGroup;
-import static com.soma.member.factory.entity.MemberFactory.createUserRoleMember;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.ArgumentMatchers.any;
@@ -45,10 +43,10 @@ class GroupServiceTest {
     @Test
     void create() throws Exception {
         //given
-        GroupCreateRequest request = createGroupCreateRequest();
+        GroupCreateRequest request = GroupCreateFactory.createGroupCreateRequest();
 
         //mocking
-        given(memberRepository.findByEmailAndStatus(anyString(), any())).willReturn(Optional.of(createUserRoleMember()));
+        given(memberRepository.findByEmailAndStatus(anyString(), any())).willReturn(Optional.of(MemberFactory.createUserRoleMember()));
 
         // when
         GroupNameResponse response = groupService.create(request, MemberFixtures.이메일);
@@ -61,11 +59,11 @@ class GroupServiceTest {
     @Test
     void join() throws Exception {
         //given
-        GroupJoinRequest request = createGroupJoinRequest();
+        GroupJoinRequest request = GroupCreateFactory.createGroupJoinRequest();
 
         //mocking
-        given(groupRepository.findByCode(anyString())).willReturn(Optional.of(createGroup()));
-        given(memberRepository.findByEmailAndStatus(anyString(), any())).willReturn(Optional.of(createUserRoleMember()));
+        given(groupRepository.findByCode(anyString())).willReturn(Optional.of(GroupFactory.createGroup()));
+        given(memberRepository.findByEmailAndStatus(anyString(), any())).willReturn(Optional.of(MemberFactory.createUserRoleMember()));
         given(joinListRepository.existsByGroupAndMember(any(), any())).willReturn(false);
 
         // when
@@ -79,11 +77,11 @@ class GroupServiceTest {
     @Test
     void canNotJoinAlreadyJoinedGroup() throws Exception {
         //given
-        GroupJoinRequest request = createGroupJoinRequest();
+        GroupJoinRequest request = GroupCreateFactory.createGroupJoinRequest();
 
         //mocking
-        given(groupRepository.findByCode(anyString())).willReturn(Optional.of(createGroup()));
-        given(memberRepository.findByEmailAndStatus(anyString(), any())).willReturn(Optional.of(createUserRoleMember()));
+        given(groupRepository.findByCode(anyString())).willReturn(Optional.of(GroupFactory.createGroup()));
+        given(memberRepository.findByEmailAndStatus(anyString(), any())).willReturn(Optional.of(MemberFactory.createUserRoleMember()));
         given(joinListRepository.existsByGroupAndMember(any(), any())).willReturn(true);
 
         // when  // then
