@@ -1,6 +1,6 @@
 package com.soma.group.factory.entity;
 
-import com.soma.group.entity.Group;
+import com.soma.domain.group.entity.Group;
 import com.soma.group.factory.fixtures.GroupFixtures;
 
 import java.time.LocalDate;

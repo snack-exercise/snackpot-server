@@ -1,6 +1,6 @@
 package com.soma.security.jwt.filter;
 
-import com.soma.member.repository.MemberRepository;
+import com.soma.domain.member.repository.MemberRepository;
 import com.soma.security.jwt.service.JwtService;
 import com.soma.common.constant.Status;
 import jakarta.servlet.FilterChain;

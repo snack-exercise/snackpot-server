@@ -1,15 +1,15 @@
 package com.soma.group.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.soma.group.dto.request.GroupCreateRequest;
-import com.soma.group.dto.request.GroupJoinRequest;
+import com.soma.domain.group.dto.request.GroupCreateRequest;
+import com.soma.domain.group.dto.request.GroupJoinRequest;
 import com.soma.group.factory.dto.GroupCreateFactory;
 import com.soma.group.factory.entity.GroupFactory;
 import com.soma.group.factory.fixtures.GroupFixtures;
-import com.soma.group.repository.GroupRepository;
-import com.soma.joinList.repository.JoinListRepository;
+import com.soma.domain.group.repository.GroupRepository;
+import com.soma.domain.joinlist.repository.JoinListRepository;
 import com.soma.member.factory.entity.MemberFactory;
-import com.soma.member.repository.MemberRepository;
+import com.soma.domain.member.repository.MemberRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

@@ -1,6 +1,6 @@
 package com.soma.member.factory.entity;
 
-import com.soma.member.entity.Member;
+import com.soma.domain.member.entity.Member;
 
 import static com.soma.member.factory.fixtures.MemberFixtures.*;
 

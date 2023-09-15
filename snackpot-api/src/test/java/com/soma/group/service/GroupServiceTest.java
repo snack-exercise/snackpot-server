@@ -1,14 +1,15 @@
 package com.soma.group.service;
 
+import com.soma.domain.group.service.GroupService;
 import com.soma.exception.group.AlreadyJoinedGroupException;
-import com.soma.group.dto.request.GroupCreateRequest;
-import com.soma.group.dto.request.GroupJoinRequest;
-import com.soma.group.dto.response.GroupNameResponse;
+import com.soma.domain.group.dto.request.GroupCreateRequest;
+import com.soma.domain.group.dto.request.GroupJoinRequest;
+import com.soma.domain.group.dto.response.GroupNameResponse;
 import com.soma.group.factory.fixtures.GroupFixtures;
-import com.soma.group.repository.GroupRepository;
-import com.soma.joinList.repository.JoinListRepository;
+import com.soma.domain.group.repository.GroupRepository;
+import com.soma.domain.joinlist.repository.JoinListRepository;
 import com.soma.member.factory.fixtures.MemberFixtures;
-import com.soma.member.repository.MemberRepository;
+import com.soma.domain.member.repository.MemberRepository;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;

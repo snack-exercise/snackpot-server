@@ -1,6 +1,6 @@
 package com.soma.security.config;
 
-import com.soma.member.repository.MemberRepository;
+import com.soma.domain.member.repository.MemberRepository;
 import com.soma.security.jwt.filter.JwtAuthenticationProcessingFilter;
 import com.soma.security.jwt.handler.JwtAccessDeniedHandler;
 import com.soma.security.jwt.service.JwtService;

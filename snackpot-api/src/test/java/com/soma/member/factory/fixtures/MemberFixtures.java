@@ -1,8 +1,8 @@
 package com.soma.member.factory.fixtures;
 
-import com.soma.member.entity.RoleType;
+import com.soma.domain.member.entity.RoleType;
 
-import static com.soma.member.entity.RoleType.*;
+import static com.soma.domain.member.entity.RoleType.*;
 
 public class MemberFixtures {
     public static String 이름 = "김누구";

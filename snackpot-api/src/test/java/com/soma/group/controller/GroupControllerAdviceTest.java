@@ -2,13 +2,14 @@ package com.soma.group.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.soma.advice.ExceptionAdvice;
+import com.soma.domain.group.controller.GroupController;
 import com.soma.exception.group.AlreadyJoinedGroupException;
 import com.soma.exception.group.GroupNotFoundException;
 import com.soma.exception.member.MemberNotFoundException;
-import com.soma.group.dto.request.GroupCreateRequest;
-import com.soma.group.dto.request.GroupJoinRequest;
+import com.soma.domain.group.dto.request.GroupCreateRequest;
+import com.soma.domain.group.dto.request.GroupJoinRequest;
 import com.soma.group.factory.dto.GroupCreateFactory;
-import com.soma.group.service.GroupService;
+import com.soma.domain.group.service.GroupService;
 import com.soma.security.TestUserArgumentResolver;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
