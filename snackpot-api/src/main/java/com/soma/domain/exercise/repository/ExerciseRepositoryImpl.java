@@ -18,10 +18,10 @@ import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
-import static com.soma.exercise.entity.QExercise.exercise;
-import static com.soma.exercise_bodypart.entity.QExerciseBodyPart.exerciseBodyPart;
-import static com.soma.exercse_like.entity.QExerciseLike.exerciseLike;
-import static com.soma.youtuber.entity.QYoutuber.youtuber;
+import static com.soma.domain.exercise.entity.QExercise.exercise;
+import static com.soma.domain.exercise_bodypart.entity.QExerciseBodyPart.exerciseBodyPart;
+import static com.soma.domain.exercse_like.entity.QExerciseLike.exerciseLike;
+import static com.soma.domain.youtuber.entity.QYoutuber.youtuber;
 
 @RequiredArgsConstructor
 @Repository
