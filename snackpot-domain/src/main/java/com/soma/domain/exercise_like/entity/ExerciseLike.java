@@ -1,4 +1,4 @@
-package com.soma.domain.exercse_like.entity;
+package com.soma.domain.exercise_like.entity;
 
 import com.soma.common.BaseEntity;
 import com.soma.domain.exercise.entity.Exercise;
