@@ -29,4 +29,9 @@ public class ExerciseController {
         exerciseService.finish(request, loginUser.getUsername());
         return Response.success();
     }
+
+    @GetMapping("/{exerciseId}")
+    public Response readExerciseDetails(@PathVariable Long exerciseId, @AuthenticationPrincipal UserDetails loginUser) {
+        return Response.success(exerciseService.readExerciseDetails(exerciseId, loginUser.getUsername()));
+    }
 }

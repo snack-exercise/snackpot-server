@@ -47,3 +47,5 @@ application-sentry.yml
 ### Firebase Cloud Messaging ###
 snackpot-fcm.json
 
+### querydsl qclass ###
+/src/main/generated/
