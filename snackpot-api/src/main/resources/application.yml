@@ -13,9 +13,7 @@ spring:
         - green
     include:
       - jwt
-      - oauth
       - fcm
-      - sentry
 
 ---
 spring:
