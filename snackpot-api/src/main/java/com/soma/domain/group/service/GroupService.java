@@ -1,20 +1,23 @@
 package com.soma.domain.group.service;
 
 import com.soma.common.constant.Status;
+import com.soma.domain.group.dto.request.GroupCreateRequest;
 import com.soma.domain.group.dto.request.GroupJoinRequest;
+import com.soma.domain.group.dto.response.GroupListResponse;
+import com.soma.domain.group.dto.response.GroupNameResponse;
+import com.soma.domain.group.entity.Group;
 import com.soma.domain.group.repository.GroupRepository;
+import com.soma.domain.joinlist.entity.JoinList;
 import com.soma.domain.joinlist.repository.JoinListRepository;
+import com.soma.domain.member.entity.Member;
+import com.soma.domain.member.repository.MemberRepository;
 import com.soma.exception.group.AlreadyJoinedGroupException;
 import com.soma.exception.group.GroupNotFoundException;
 import com.soma.exception.member.MemberNotFoundException;
-import com.soma.domain.group.dto.request.GroupCreateRequest;
-import com.soma.domain.group.dto.response.GroupNameResponse;
-import com.soma.domain.group.entity.Group;
-import com.soma.domain.joinlist.entity.JoinList;
-import com.soma.domain.member.entity.Member;
-import com.soma.domain.member.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Slice;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -50,5 +53,14 @@ public class GroupService {
         }
 
         return GroupNameResponse.toDto(group);
+    }
+
+    public Slice<GroupListResponse> readAll(Long groupIdCursor, LocalDate startDateCursor, Integer size, String email) {
+        Member member = memberRepository.findByEmailAndStatus(email, Status.ACTIVE).orElseThrow(MemberNotFoundException::new);
+        if (groupIdCursor == null && startDateCursor == null){
+            return groupRepository.findFirstGroupList(member, PageRequest.of(0, size));
+        }else{
+            return groupRepository.findAllByCursor(member, groupIdCursor, startDateCursor, PageRequest.of(0, size));
+        }
     }
 }
