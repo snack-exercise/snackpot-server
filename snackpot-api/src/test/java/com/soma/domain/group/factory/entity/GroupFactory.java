@@ -13,4 +13,12 @@ public class GroupFactory {
                 .startDate(LocalDate.now())
                 .build();
     }
+
+    public static Group createGroupWithNameAndStartDate(String name, LocalDate startDate){
+        return Group.builder()
+                .name(name)
+                .code(GroupFixtures.그룹코드)
+                .startDate(startDate)
+                .build();
+    }
 }
