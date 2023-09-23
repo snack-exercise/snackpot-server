@@ -1,0 +1,9 @@
+spring:
+  profiles:
+    group:
+      local-env:
+        - local
+      dev-env:
+        - dev
+      prod-env:
+        - prod

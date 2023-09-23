@@ -1,0 +1,5 @@
+rootProject.name = 'snackpot'
+include 'snackpot-api'
+include 'snackpot-batch'
+include 'snackpot-domain'
+
