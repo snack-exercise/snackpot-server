@@ -1,0 +1,16 @@
+version: '3' # docker-compose는 버전 1~3까지 존재, 최신 버전 사용을 위해서 버전 3 설정
+
+services: # 컨테이너 집합 요소
+  snackpot-api:
+    image: ${DOCKER_REPO}:latest-api-prod
+    networks:
+      - snack_net
+
+  snackpot-batch:
+    image: ${DOCKER_REPO}:latest-batch-prod
+    networks:
+      - snack_net
+
+networks:
+  snack_net:
+    driver: bridge
