@@ -1,17 +1,20 @@
 package com.soma.domain.joinlist.entity;
 
+import com.soma.common.BaseEntity;
+
 import com.soma.domain.group.entity.Group;
 import com.soma.domain.member.entity.Member;
 import jakarta.persistence.*;
 import lombok.*;
 
-import static com.soma.domain.joinlist.entity.JoinType.*;
+import static com.soma.domain.joinlist.entity.JoinType.HOST;
+
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
 @Entity
-public class JoinList {
+public class JoinList extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -30,6 +33,7 @@ public class JoinList {
         this.member = member;
         this.group = group;
         this.joinType = joinType;
+        active();
     }
 
     public static JoinList createHostJoinList(Member member, Group group){
