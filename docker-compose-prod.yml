@@ -3,11 +3,15 @@ version: '3' # docker-compose는 버전 1~3까지 존재, 최신 버전 사용�
 services: # 컨테이너 집합 요소
   snackpot-api:
     image: ${DOCKER_REPO}:latest-api-prod
+    environment:
+      - DOCKER_REPO=${DOCKER_REPO}
     networks:
       - snack_net
 
   snackpot-batch:
     image: ${DOCKER_REPO}:latest-batch-prod
+    environment:
+      - DOCKER_REPO=${DOCKER_REPO}
     networks:
       - snack_net
 
