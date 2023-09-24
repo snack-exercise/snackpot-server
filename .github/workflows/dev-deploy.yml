@@ -78,12 +78,12 @@ jobs:
           username: ${{ secrets.DEV_EC2_USERNAME }}
           key: ${{ secrets.DEV_KEY }}
           port: 22
-          source : "./snackpot-api/docker-compose.yml"
+          source : "./snackpot-api/docker-compose-dev.yml"
           target : "./snackApp"
           debug: true
 
       # (8) 로컬 .env파일 파일 EC2로 복사
-      - name: Copy docker-compose.yml to EC2 via SCP
+      - name: Copy .env to EC2 via SCP
         uses: appleboy/scp-action@master
         with:
           host: ${{ secrets.DEV_HOST }}
@@ -95,7 +95,7 @@ jobs:
           debug: true
 
       # (8) 로컬 mariadb 파일 파일 EC2로 복사
-      - name: Copy docker-compose.yml to EC2 via SCP
+      - name: Copy mariadb to EC2 via SCP
         uses: appleboy/scp-action@master
         with:
           host: ${{ secrets.DEV_HOST }}
