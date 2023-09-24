@@ -116,7 +116,7 @@ jobs:
           key: ${{ secrets.DEV_KEY }}
           port: 22
           script: |
-            cd snackApp
+            cd snackApp/snackpot-api
             sudo docker-compose -f docker-compose-dev.yml down
             sudo docker-compose -f docker-compose-dev.yml pull
             sudo docker image rm ${{ secrets.DOCKER_MJ_REPO }}
