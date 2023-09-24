@@ -63,10 +63,6 @@ jobs:
       - name: ./gradlew 권한 설정
         run: chmod +x ./gradlew
 
-      # (5) Gradle build domain 모듈 build (Test 제외)
-      - name: Build with Gradle
-        run: ./gradlew :snackpot-domain:clean build -x test
-
       # (5) Gradle build snackpot-batch모듈 build (Test 제외)
       - name: Build with Gradle
         run: ./gradlew :snackpot-batch:clean build -x test
