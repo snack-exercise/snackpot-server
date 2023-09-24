@@ -26,7 +26,7 @@ jobs:
       ## (3-1) application-dev.yml 생성
       - name: make application-dev.yml
         run: |
-          cd ./src/main/resources
+          cd ./snackpot-api/src/main/resources
           touch ./application-dev.yml
           echo "${{ secrets.APPLICATION_DEV_YML }}" > ./application-dev.yml
         shell: bash
@@ -34,61 +34,40 @@ jobs:
       ## (3-2) application-jwt.yml 생성
       - name: make application-jwt.yml
         run: |
-          cd ./src/main/resources
+          cd ./snackpot-api/src/main/resources
           touch ./application-jwt.yml
           echo "${{ secrets.APPLICATION_JWT_YML }}" > ./application-jwt.yml
         shell: bash
 
-      ## (3-3) application-oauth.yml 생성
-      - name: make application-oauth.yml
+      ## (3-2) .env 생성
+      - name: make .env
         run: |
-          cd ./src/main/resources
-          touch ./application-oauth.yml
-          echo "${{ secrets.APPLICATION_OAUTH_YML }}" > ./application-oauth.yml
-        shell: bash
-
-      ## (3-4) application-fcm.yml 생성
-      - name: make application-fcm.yml
-        run: |
-          cd ./src/main/resources
-          touch ./application-fcm.yml
-          echo "${{ secrets.APPLICATION_FCM_YML }}" > ./application-fcm.yml
-        shell: bash
-        
-      ## (3-5) application-sentry.yml 생성
-      - name: make application-sentry.yml
-        run: |
-          cd ./src/main/resources
-          touch ./application-sentry.yml
-          echo "${{ secrets.APPLICATION_SENTRY_YML }}" > ./application-sentry.yml
-        shell: bash
-
-      ## (3-6) snackpot-fcm.json 생성
-      - name: make snackpot-fcm.json
-        run: echo "${{ secrets.FCM_JSON_SECRET }}" | base64 --decode > ./src/main/resources/snackpot-fcm.json
+          cd ./snackpot-api
+          touch ./.env
+          echo "${{ secrets.DEV_DOCKER_ENV }}" > ./.env
         shell: bash
 
       # (4) ./gradlew 권한 설정
       - name: ./gradlew 권한 설정
         run: chmod +x ./gradlew
 
-      # (5) Gradle build (Test 제외)
+      # (5) Gradle build snackpot-api모듈만 build (Test 제외)
       - name: Build with Gradle
-        run: ./gradlew build -x test
+        run: ./gradlew :snackpot-api:clean build -x test
 
       # (6) docker build & push to production
       - name: Docker build & push to DockerHub
         run: |
-          docker login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_PASSWORD }}
-          docker build -t ${{ secrets.DOCKER_REPO }}:latest-dev .
-          docker push ${{ secrets.DOCKER_REPO }}:latest-dev
+          docker login -u ${{ secrets.DOCKER_MJ_USERNAME }} -p ${{ secrets.DOCKER_MJ_PASSWORD }}
+          docker build -t ${{ secrets.DOCKER_MJ_REPO }}:latest-dev ./snackpot-api
+          docker push ${{ secrets.DOCKER_MJ_REPO }}:latest-dev
 
       # (7) aws 세팅
       - name: aws 세팅
         uses: aws-actions/configure-aws-credentials@v1
         with:
-          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-access-key-id: ${{ secrets.AWS_DEV_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_DEV_SECRET_ACCESS_KEY }}
           aws-region: ap-northeast-2
 
       # (8) 로컬 docker-compose.yml 파일 EC2로 복사
@@ -96,24 +75,49 @@ jobs:
         uses: appleboy/scp-action@master
         with:
           host: ${{ secrets.DEV_HOST }}
-          username: ${{ secrets.EC2_USERNAME }}
-          key: ${{ secrets.KEY }}
+          username: ${{ secrets.DEV_EC2_USERNAME }}
+          key: ${{ secrets.DEV_KEY }}
           port: 22
-          source : "./docker-compose.yml"
+          source : "./snackpot-api/docker-compose.yml"
           target : "./snackApp"
           debug: true
+
+      # (8) 로컬 .env파일 파일 EC2로 복사
+      - name: Copy docker-compose.yml to EC2 via SCP
+        uses: appleboy/scp-action@master
+        with:
+          host: ${{ secrets.DEV_HOST }}
+          username: ${{ secrets.DEV_EC2_USERNAME }}
+          key: ${{ secrets.DEV_KEY }}
+          port: 22
+          source : "./snackpot-api/.env"
+          target : "./snackApp"
+          debug: true
+
+      # (8) 로컬 mariadb 파일 파일 EC2로 복사
+      - name: Copy docker-compose.yml to EC2 via SCP
+        uses: appleboy/scp-action@master
+        with:
+          host: ${{ secrets.DEV_HOST }}
+          username: ${{ secrets.DEV_EC2_USERNAME }}
+          key: ${{ secrets.DEV_KEY }}
+          port: 22
+          source : "./snackpot-api/mariadb"
+          target : "./snackApp"
+          debug: true
+
 
       # (9) 서버에 접속하여 도커 이미지를 pull 받고 실행하기
       - name: executing remote ssh commands using password
         uses: appleboy/ssh-action@v0.1.6
         with:
           host: ${{ secrets.DEV_HOST }}
-          username: ${{ secrets.EC2_USERNAME }}
-          key: ${{ secrets.KEY }}
+          username: ${{ secrets.DEV_EC2_USERNAME }}
+          key: ${{ secrets.DEV_KEY }}
           port: 22
           script: |
             cd snackApp
-            sudo docker-compose down
-            sudo docker-compose pull
-            sudo docker image rm ${{ secrets.DOCKER_REPO }}
-            sudo docker-compose up -d
+            sudo docker-compose -f docker-compose-dev.yml down
+            sudo docker-compose -f docker-compose-dev.yml pull
+            sudo docker image rm ${{ secrets.DOCKER_MJ_REPO }}
+            sudo docker-compose -f docker-compose-dev.yml -d
