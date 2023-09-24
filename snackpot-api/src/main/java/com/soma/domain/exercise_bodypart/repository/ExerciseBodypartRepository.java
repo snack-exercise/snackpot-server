@@ -9,4 +9,6 @@ import java.util.List;
 
 public interface ExerciseBodypartRepository extends JpaRepository<ExerciseBodyPart, Long> {
     List<BodyPart> findAllByExerciseIdAndStatus(Long exerciseId, Status status);
+
 }
+

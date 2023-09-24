@@ -1,7 +1,6 @@
 package com.soma.domain.exercise.service;
 
 import com.soma.domain.bodypart.entity.BodyPart;
-import com.soma.domain.bodypart.repository.BodyPartRepository;
 import com.soma.domain.exercise.dto.request.ExerciseFinishRequest;
 import com.soma.domain.exercise.dto.request.ExerciseReadCondition;
 import com.soma.domain.exercise.dto.response.ExerciseDetailResponse;
