@@ -7,7 +7,7 @@ services:
 #      - ~/docker-volume/mariadb/conf.d:/etc/mysql/conf.d
 #      - ~/docker-volume/mariadb/mysql:/var/lib/mysql
 #      - ~/docker-volume/mariadb/var/log/maria:/var/log/maria
-      - mariadb/conf.d/my.conf:/etc/mysql/conf.d
+      - /mariadb/conf.d/my.conf:/etc/mysql/conf.d
       - db-data:/var/lib/mysql
     environment:
       - .env
