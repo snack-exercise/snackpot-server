@@ -18,7 +18,7 @@ services:
       - snackpot_net
 
   application:
-    image: mingsound/snackpot:1.0
+    image: mingsound/snackpot:latest-dev
     container_name: snackpot_spring_container
     environment:
 #      SPRING_DATASOURCE_URL: jdbc:mariadb://database:3306/snackpot_db?useUnicode=true
