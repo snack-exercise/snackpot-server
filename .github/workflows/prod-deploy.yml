@@ -63,9 +63,13 @@ jobs:
       - name: ./gradlew 권한 설정
         run: chmod +x ./gradlew
 
-      # (5) Gradle clean && Gradle build (Test 제외)
+      # (5) Gradle build snackpot-batch모듈 build (Test 제외)
       - name: Build with Gradle
-        run: ./gradlew clean && ./gradlew build -x test
+        run: ./gradlew :snackpot-batch:clean build -x test
+
+      # (5) Gradle build snackpot-api모듈 build (Test 제외)
+      - name: Build with Gradle
+        run: ./gradlew :snackpot-api:clean build -x test
 
       # (6-1) docker build & push to production (API)
       - name: Docker build & push to DockerHub (API)
