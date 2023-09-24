@@ -1,13 +1,13 @@
 package com.soma.domain.exercise.service;
 
 import com.soma.domain.bodypart.entity.BodyPart;
-import com.soma.domain.bodypart.repository.BodyPartRepository;
 import com.soma.domain.exercise.dto.request.ExerciseFinishRequest;
 import com.soma.domain.exercise.dto.request.ExerciseReadCondition;
 import com.soma.domain.exercise.dto.response.ExerciseDetailResponse;
 import com.soma.domain.exercise.dto.response.ExerciseResponse;
 import com.soma.domain.exercise.entity.Exercise;
 import com.soma.domain.exercise.repository.ExerciseRepository;
+import com.soma.domain.exercise_bodypart.repository.ExerciseBodypartRepository;
 import com.soma.domain.exercise_like.repository.ExerciseLikeRepository;
 import com.soma.domain.exercise_record.repository.ExerciseRecordRepository;
 import com.soma.domain.member.entity.Member;
@@ -30,7 +30,7 @@ public class ExerciseService {
     private final ExerciseRepository exerciseRepository;
     private final ExerciseRecordRepository exerciseRecordRepository;
     private final MemberRepository memberRepository;
-    private final BodyPartRepository bodyPartRepository;
+    private final ExerciseBodypartRepository exerciseBodypartRepository;
 
     private final ExerciseLikeRepository exerciseLikeRepository;
 
@@ -47,7 +47,7 @@ public class ExerciseService {
 
     public ExerciseDetailResponse readExerciseDetails(Long exerciseId, String email) {
         Exercise exercise = exerciseRepository.findByIdAndStatus(exerciseId, ACTIVE).orElseThrow(ExerciseNotFoundException::new);
-        List<BodyPart> bodyPartList = bodyPartRepository.findAllByExerciseIdAndStatus(exerciseId, ACTIVE);
+        List<BodyPart> bodyPartList = exerciseBodypartRepository.findAllByExerciseIdAndStatus(exerciseId, ACTIVE);
         Member member = memberRepository.findByEmailAndStatus(email, ACTIVE).orElseThrow(MemberNotFoundException::new);
         Boolean isLike = exerciseLikeRepository.existsByMemberAndExercise(member, exercise);
         return ExerciseDetailResponse.toDto(exercise, bodyPartList, isLike);
