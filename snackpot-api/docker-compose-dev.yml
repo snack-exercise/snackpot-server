@@ -1,0 +1,40 @@
+version: "3"
+services:
+  database:
+    container_name: snackpot_db_container
+    image: mariadb
+    volumes: # [로컬 디렉토리]:[도커 컨테이너 내부 디렉토리] 매핑
+#      - ~/docker-volume/mariadb/conf.d:/etc/mysql/conf.d
+#      - ~/docker-volume/mariadb/mysql:/var/lib/mysql
+#      - ~/docker-volume/mariadb/var/log/maria:/var/log/maria
+      - /mariadb/conf.d/my.conf:/etc/mysql/conf.d
+      - db-data:/var/lib/mysql
+    environment:
+      - .env
+    command: ['--character-set-server=utf8mb4', '--collation-server=utf8mb4_unicode_ci'] # 기본 charset utf8mb4로 설정(이모지 + 한글 가능)
+    ports:
+      - 3306:3306
+    networks:
+      - snackpot_net
+
+  application:
+    image: mingsound/snackpot:latest-dev
+    container_name: snackpot_spring_container
+    environment:
+#      SPRING_DATASOURCE_URL: jdbc:mariadb://database:3306/snackpot_db?useUnicode=true
+#      SPRING_DATASOURCE_USERNAME: root
+#      SPRING_DATASOURCE_PASSWORD: password
+      SPRING_PROFILES_ACTIVE : dev-env # 사용할 profile 지정
+    ports:
+      - 8080:8080
+    depends_on:
+      - database
+    networks:
+      - snackpot_net
+
+networks:
+  snackpot_net:
+    driver: bridge
+
+volumes:
+  db-data:
