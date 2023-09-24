@@ -12,6 +12,8 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDate;
+
 @Slf4j
 @Tag(name = "Exgroup", description = "운동 그룹 API")
 @RequiredArgsConstructor
@@ -30,6 +32,15 @@ public class GroupController {
     @PostMapping("/join")
     public Response join(@RequestBody GroupJoinRequest request, @AuthenticationPrincipal UserDetails loginUser){
         return Response.success(groupService.join(request, loginUser.getUsername()));
+    }
+
+    @ResponseStatus(HttpStatus.OK)
+    @GetMapping()
+    public Response readAll(@RequestParam(required = false) Long groupIdCursor, @RequestParam(required = false) LocalDate startDateCursor, @RequestParam(defaultValue = "5") Integer size, @AuthenticationPrincipal UserDetails loginUser){
+        System.out.println("groupIdCursor = " + groupIdCursor);
+        System.out.println("startDateCursor = " + startDateCursor);
+
+        return Response.success(groupService.readAll(groupIdCursor, startDateCursor, size, loginUser.getUsername()));
     }
 
 }

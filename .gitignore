@@ -47,5 +47,8 @@ application-sentry.yml
 ### Firebase Cloud Messaging ###
 snackpot-fcm.json
 
-### Q 파일 ###
-*/src/main/generated
+### querydsl qclass ###
+/src/main/generated/
+
+### docker 관련 파일
+.env
