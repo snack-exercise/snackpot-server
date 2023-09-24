@@ -49,3 +49,6 @@ snackpot-fcm.json
 
 ### querydsl qclass ###
 /src/main/generated/
+
+### docker 관련 파일
+.env
