@@ -43,8 +43,8 @@ jobs:
       - name: make .env
         run: |
           cd ./snackpot-api
-          touch ./.env
-          echo "${{ secrets.DEV_DOCKER_ENV }}" > ./.env
+          touch .env
+          echo "${{ secrets.DEV_DOCKER_ENV }}" > .env
           ls
           cd ./src/main/resources
           ls
