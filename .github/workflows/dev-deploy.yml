@@ -46,6 +46,8 @@ jobs:
           touch ./.env
           echo "${{ secrets.DEV_DOCKER_ENV }}" > ./.env
           ls
+          cd ./src/main/resources
+          ls
         shell: bash
 
       # (4) ./gradlew 권한 설정
