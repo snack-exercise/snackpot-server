@@ -13,7 +13,7 @@ services:
       - type: volume
         source: db-data
         target: /var/lib/mysql
-    environment:
+    env_file:
       - ./.env
     command: ['--character-set-server=utf8mb4', '--collation-server=utf8mb4_unicode_ci'] # 기본 charset utf8mb4로 설정(이모지 + 한글 가능)
     ports:
