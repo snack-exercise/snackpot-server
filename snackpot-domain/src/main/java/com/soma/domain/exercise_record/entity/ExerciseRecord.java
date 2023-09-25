@@ -1,5 +1,6 @@
 package com.soma.domain.exercise_record.entity;
 
+import com.soma.common.BaseEntity;
 import com.soma.domain.exercise.entity.Exercise;
 import com.soma.domain.member.entity.Member;
 import jakarta.persistence.*;
@@ -9,7 +10,7 @@ import lombok.*;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
 @Entity
-public class ExerciseRecord {
+public class ExerciseRecord extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
