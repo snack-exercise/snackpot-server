@@ -36,11 +36,8 @@ public class GroupController {
 
     @ResponseStatus(HttpStatus.OK)
     @GetMapping()
-    public Response readAll(@RequestParam(required = false) Long groupIdCursor, @RequestParam(required = false) LocalDate startDateCursor, @RequestParam(defaultValue = "5") Integer size, @AuthenticationPrincipal UserDetails loginUser){
-        System.out.println("groupIdCursor = " + groupIdCursor);
-        System.out.println("startDateCursor = " + startDateCursor);
-
-        return Response.success(groupService.readAll(groupIdCursor, startDateCursor, size, loginUser.getUsername()));
+    public Response readAll(@RequestParam(required = false) Long groupIdCursor, @RequestParam(defaultValue = "5") Integer size, @AuthenticationPrincipal UserDetails loginUser){
+        return Response.success(groupService.readAll(groupIdCursor, size, loginUser.getUsername()));
     }
 
 }
