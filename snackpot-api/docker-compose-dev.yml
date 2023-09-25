@@ -10,7 +10,7 @@ services:
       - /mariadb/conf.d/my.conf:/etc/mysql/conf.d
       - db-data:/var/lib/mysql
     environment:
-      - .env
+      - ./.env
     command: ['--character-set-server=utf8mb4', '--collation-server=utf8mb4_unicode_ci'] # 기본 charset utf8mb4로 설정(이모지 + 한글 가능)
     ports:
       - 3306:3306
