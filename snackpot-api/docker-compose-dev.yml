@@ -8,7 +8,7 @@ services:
 #      - ~/docker-volume/mariadb/mysql:/var/lib/mysql
 #      - ~/docker-volume/mariadb/var/log/maria:/var/log/maria
       - ./mariadb/conf.d/my.conf:/etc/mysql/conf.d
-      - ./db/data:/var/lib/mysql
+      - db-data:/var/lib/mysql
     environment:
       - ./.env
     command: ['--character-set-server=utf8mb4', '--collation-server=utf8mb4_unicode_ci'] # 기본 charset utf8mb4로 설정(이모지 + 한글 가능)
@@ -36,5 +36,5 @@ networks:
   snackpot_net:
     driver: bridge
 
-#volumes:
-#  db-data:
+volumes:
+  db-data:
