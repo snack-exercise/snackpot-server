@@ -10,6 +10,6 @@ import org.springframework.data.domain.Slice;
 import java.time.LocalDate;
 
 public interface GroupRepositoryCustom {
-    Slice<GroupListResponse> findAllByCursor(Member member, Long groupIdCursor, LocalDate startDateCursor, Pageable pageable);
+    Slice<GroupListResponse> findAllByCursor(Member member, Long groupIdCursor, Pageable pageable);
     Slice<GroupListResponse> findFirstGroupList(Member member, Pageable pageable);
 }

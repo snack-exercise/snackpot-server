@@ -55,12 +55,12 @@ public class GroupService {
         return GroupNameResponse.toDto(group);
     }
 
-    public Slice<GroupListResponse> readAll(Long groupIdCursor, LocalDate startDateCursor, Integer size, String email) {
+    public Slice<GroupListResponse> readAll(Long groupIdCursor, Integer size, String email) {
         Member member = memberRepository.findByEmailAndStatus(email, Status.ACTIVE).orElseThrow(MemberNotFoundException::new);
-        if (groupIdCursor == null && startDateCursor == null){
+        if (groupIdCursor == null){
             return groupRepository.findFirstGroupList(member, PageRequest.of(0, size));
         }else{
-            return groupRepository.findAllByCursor(member, groupIdCursor, startDateCursor, PageRequest.of(0, size));
+            return groupRepository.findAllByCursor(member, groupIdCursor, PageRequest.of(0, size));
         }
     }
 }

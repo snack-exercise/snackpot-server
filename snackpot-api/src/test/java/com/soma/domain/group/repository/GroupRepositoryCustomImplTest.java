@@ -72,7 +72,7 @@ class GroupRepositoryCustomImplTest {
 
 
         //when
-        Slice<GroupListResponse> allByCursor = groupRepository.findAllByCursor(사용자A, 그룹D.getId(), LocalDate.of(2023, 9, 3), PageRequest.of(0, 2));
+        Slice<GroupListResponse> allByCursor = groupRepository.findAllByCursor(사용자A, 그룹D.getId(), PageRequest.of(0, 2));
 
         //then
         assertThat(allByCursor.getContent()).hasSize(2)
@@ -116,7 +116,7 @@ class GroupRepositoryCustomImplTest {
 
 
         //when
-        Slice<GroupListResponse> allByCursor = groupRepository.findAllByCursor(사용자A, 그룹B.getId(), LocalDate.of(2023, 9, 3), PageRequest.of(0, 2));
+        Slice<GroupListResponse> allByCursor = groupRepository.findAllByCursor(사용자A, 그룹B.getId(), PageRequest.of(0, 2));
 
         //then
         assertThat(allByCursor.getContent()).hasSize(1)
