@@ -49,7 +49,7 @@ public class ExerciseService {
         Exercise exercise = exerciseRepository.findByIdAndStatus(exerciseId, ACTIVE).orElseThrow(ExerciseNotFoundException::new);
         List<BodyPart> bodyPartList = exerciseBodypartRepository.findAllByExerciseIdAndStatus(exerciseId, ACTIVE);
         Member member = memberRepository.findByEmailAndStatus(email, ACTIVE).orElseThrow(MemberNotFoundException::new);
-        Boolean isLike = exerciseLikeRepository.existsByMemberAndExercise(member, exercise);
-        return ExerciseDetailResponse.toDto(exercise, bodyPartList, isLike);
+        Boolean isLiked = exerciseLikeRepository.existsByMemberAndExercise(member, exercise);
+        return ExerciseDetailResponse.toDto(exercise, bodyPartList, isLiked);
     }
 }
