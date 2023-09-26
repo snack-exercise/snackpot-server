@@ -1,8 +1,10 @@
 package com.soma.domain.group.service;
 
 import com.soma.common.constant.Status;
+import com.soma.domain.exercise_record.repository.ExerciseRecordRepository;
 import com.soma.domain.group.dto.request.GroupCreateRequest;
 import com.soma.domain.group.dto.request.GroupJoinRequest;
+import com.soma.domain.group.dto.response.GroupAbsenteeResponse;
 import com.soma.domain.group.dto.response.GroupListResponse;
 import com.soma.domain.group.dto.response.GroupNameResponse;
 import com.soma.domain.group.entity.Group;
@@ -22,6 +24,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.util.List;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -31,6 +35,7 @@ public class GroupService {
     private final GroupRepository groupRepository;
     private final JoinListRepository joinListRepository;
     private final MemberRepository memberRepository;
+    private final ExerciseRecordRepository exerciseRecordRepository;
 
     @Transactional
     public GroupNameResponse create(GroupCreateRequest request, String email) {
@@ -62,5 +67,14 @@ public class GroupService {
         }else{
             return groupRepository.findAllByCursor(member, groupIdCursor, PageRequest.of(0, size));
         }
+    }
+
+    public List<GroupAbsenteeResponse> readAllAbsentees(Long groupId) {
+        if(!groupRepository.existsById(groupId)){
+            throw new GroupNotFoundException();
+        }
+        LocalDateTime today = LocalDateTime.now().withHour(0).withMinute(0).withSecond(0);// 오늘 자정 구일하기
+        LocalDateTime nextDay = today.plusDays(1);// 내일 자정 구하기
+        return joinListRepository.findAllAbsenteesByGroupId(groupId, today, nextDay).stream().map(GroupAbsenteeResponse::toDto).toList();
     }
 }
