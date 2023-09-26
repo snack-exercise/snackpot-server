@@ -9,6 +9,15 @@ public class ExerciseRecordFactory {
         return ExerciseRecord.builder()
                 .exercise(exercise)
                 .member(member)
+                .time(10)
+                .build();
+    }
+
+    public static ExerciseRecord createExerciseRecordWithExerciseAndMemberAndTime(Exercise exercise, Member member, Integer time){
+        return ExerciseRecord.builder()
+                .exercise(exercise)
+                .member(member)
+                .time(time)
                 .build();
     }
 }
