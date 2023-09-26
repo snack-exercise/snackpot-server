@@ -7,3 +7,10 @@ spring:
         - dev
       prod-env:
         - prod
+    include:
+      - local
+      - youtube
+
+
+server:
+  port: 8081
