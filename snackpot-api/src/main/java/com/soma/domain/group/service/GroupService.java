@@ -81,7 +81,7 @@ public class GroupService {
         return joinListRepository.findAllAbsenteesByGroupId(groupId, today, nextDay).stream().map(GroupAbsenteeResponse::toDto).toList();
     }
 
-    public Object readExerciseTimeStatics(Long groupId) {
+    public List<GroupTimeStaticsResponse> readExerciseTimeStatics(Long groupId) {
         if(!groupRepository.existsById(groupId)){
             throw new GroupNotFoundException();
         }
