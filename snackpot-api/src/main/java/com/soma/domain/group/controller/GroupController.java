@@ -1,8 +1,8 @@
 package com.soma.domain.group.controller;
 
+import com.soma.domain.group.dto.request.GroupCreateRequest;
 import com.soma.domain.group.dto.request.GroupJoinRequest;
 import com.soma.domain.group.service.GroupService;
-import com.soma.domain.group.dto.request.GroupCreateRequest;
 import com.soma.util.response.Response;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
@@ -11,8 +11,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
-
-import java.time.LocalDate;
 
 @Slf4j
 @Tag(name = "Exgroup", description = "운동 그룹 API")
@@ -40,6 +38,11 @@ public class GroupController {
         return Response.success(groupService.readAll(groupIdCursor, size, loginUser.getUsername()));
     }
 
+    @ResponseStatus(HttpStatus.OK)
+    @GetMapping("/{groupId}/absentees")
+    public Response readAllAbsentees(@PathVariable Long groupId, @AuthenticationPrincipal UserDetails loginUser){
+        return Response.success(groupService.readAllAbsentees(groupId));
+    }
 }
 
 
