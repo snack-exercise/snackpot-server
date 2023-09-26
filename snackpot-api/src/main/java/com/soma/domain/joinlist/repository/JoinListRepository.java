@@ -16,4 +16,7 @@ public interface JoinListRepository extends JpaRepository<JoinList, Long>{
     @Query("select j.member from JoinList j left join ExerciseRecord er on j.member = er.member and :startDateTime <= er.createdAt AND er.createdAt < :endDateTime " +
             "where j.group.id = :groupId and er.id is null")
     List<Member> findAllAbsenteesByGroupId(@Param("groupId") Long groupId, @Param("startDateTime") LocalDateTime startDateTime, @Param("endDateTime") LocalDateTime endDateTime);
+
+    @Query("select j.member from JoinList j where j.group.id = :groupId and j.status = 'ACTIVE'")
+    List<Member> findAllMembersByGroupId(@Param("groupId") Long groupId);
 }
