@@ -12,10 +12,10 @@ import com.soma.domain.group.factory.fixtures.GroupFixtures;
 import com.soma.domain.group.repository.GroupRepository;
 import com.soma.domain.joinlist.repository.JoinListRepository;
 import com.soma.domain.member.entity.Member;
+import com.soma.domain.member.factory.entity.MemberFactory;
 import com.soma.domain.member.repository.MemberRepository;
 import com.soma.joinlist.factory.JoinListFactory;
 
-import com.soma.member.factory.entity.MemberFactory;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;

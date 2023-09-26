@@ -7,10 +7,11 @@ import com.soma.domain.group.entity.Group;
 import com.soma.domain.group.factory.entity.GroupFactory;
 import com.soma.domain.joinlist.repository.JoinListRepository;
 import com.soma.domain.member.entity.Member;
+import com.soma.domain.member.factory.entity.MemberFactory;
 import com.soma.domain.member.repository.MemberRepository;
 import com.soma.joinlist.factory.JoinListFactory;
 
-import com.soma.member.factory.entity.MemberFactory;
+
 
 import org.assertj.core.groups.Tuple;
 import org.junit.jupiter.api.DisplayName;
