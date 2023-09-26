@@ -1,15 +1,16 @@
 package com.soma.domain.group.dto.response;
 
+import com.soma.domain.member.entity.Member;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
-
-import java.util.List;
 
 @AllArgsConstructor
 @Getter
 public class GroupAbsenteeResponse {
-    private List<String> usernames;
-    public static GroupAbsenteeResponse toDto(List<String> absentees){
-        return new GroupAbsenteeResponse(absentees);
+    private String name;
+    private String profileImage;
+
+    public static GroupAbsenteeResponse toDto(Member member){
+        return new GroupAbsenteeResponse(member.getName(), member.getProfileImg());
     }
 }

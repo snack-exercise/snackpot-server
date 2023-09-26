@@ -24,6 +24,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
+import java.util.List;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -67,10 +68,10 @@ public class GroupService {
         }
     }
 
-    public GroupAbsenteeResponse readAllAbsentees(Long groupId) {
+    public List<GroupAbsenteeResponse> readAllAbsentees(Long groupId) {
         if(!groupRepository.existsById(groupId)){
             throw new GroupNotFoundException();
         }
-        return GroupAbsenteeResponse.toDto(joinListRepository.findAllAbsenteesByGroupId(groupId).stream().map(Member::getName).toList());
+        return joinListRepository.findAllAbsenteesByGroupId(groupId).stream().map(GroupAbsenteeResponse::toDto).toList();
     }
 }

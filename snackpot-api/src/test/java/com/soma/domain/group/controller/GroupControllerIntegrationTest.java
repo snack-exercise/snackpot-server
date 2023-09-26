@@ -17,11 +17,13 @@ import com.soma.domain.group.repository.GroupRepository;
 import com.soma.domain.joinlist.repository.JoinListRepository;
 import com.soma.domain.member.entity.Member;
 import com.soma.domain.member.factory.entity.MemberFactory;
+import com.soma.domain.member.factory.fixtures.MemberFixtures;
 import com.soma.domain.member.repository.MemberRepository;
 import com.soma.domain.youtuber.entity.Youtuber;
 import com.soma.domain.youtuber.factory.entity.YoutuberFactory;
 import com.soma.domain.youtuber.repository.YoutuberRepository;
 import com.soma.joinlist.factory.JoinListFactory;
+import org.assertj.core.groups.Tuple;
 import org.hamcrest.Matchers;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -39,6 +41,7 @@ import org.springframework.web.context.WebApplicationContext;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Map;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers.springSecurity;
@@ -253,7 +256,9 @@ public class GroupControllerIntegrationTest {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.success").value("true"))
                 .andExpect(jsonPath("$.code").value("0"))
-                .andExpect(jsonPath("$.result.data.usernames", Matchers.containsInAnyOrder("회원B", "회원C")))
+                .andExpect(jsonPath("$.result.data", Matchers.containsInAnyOrder(
+                        Map.of("name", "회원B", "profileImage", MemberFixtures.프로필사진),
+                        Map.of("name", "회원C", "profileImage", MemberFixtures.프로필사진))))
                 .andDo(print());
     }
 
