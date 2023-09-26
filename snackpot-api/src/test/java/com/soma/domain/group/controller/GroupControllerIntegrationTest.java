@@ -306,6 +306,11 @@ public class GroupControllerIntegrationTest {
         기록B.updateCreatedAt(수);
         기록D.updateCreatedAt(일);
 
+        List<Member> all = memberRepository.findAll();
+        for (Member member : all) {
+            System.out.println("member = " + member.getName() + ", " + member.getId());
+        }
+
         //when //then
         mockMvc.perform(
                         get("/groups/{groupId}/statistics", 그룹.getId())
@@ -318,17 +323,17 @@ public class GroupControllerIntegrationTest {
                 .andExpect(jsonPath("$.result.data[0].date").value("2023-09-25"))
                 .andExpect(jsonPath("$.result.data[0].statics", hasSize(4)))
                 .andExpect(jsonPath("$.result.data[0].statics", Matchers.containsInAnyOrder(
-                        Map.of("userId", 2, "name", "회원A", "time",  10), // todo: 회원A.getId()로 하면 에러 발생함
-                        Map.of("userId", 3, "name", "회원B", "time", 0),
-                        Map.of("userId", 4, "name", "회원C", "time", 0),
-                        Map.of("userId", 5, "name", "회원D", "time", 0))))
+                        Map.of("userId", 회원A.getId().intValue(), "name", "회원A", "time",  10), // todo: 회원A.getId()로 하면 에러 발생함
+                        Map.of("userId", 회원B.getId().intValue(), "name", "회원B", "time", 0),
+                        Map.of("userId", 회원C.getId().intValue(), "name", "회원C", "time", 0),
+                        Map.of("userId", 회원D.getId().intValue(), "name", "회원D", "time", 0))))
                 .andExpect(jsonPath("$.result.data[6].day").value("sun"))
                 .andExpect(jsonPath("$.result.data[6].date").value("2023-10-01"))
                 .andExpect(jsonPath("$.result.data[6].statics", Matchers.containsInAnyOrder(
-                        Map.of("userId", 2, "name", "회원A", "time",  0), // todo: 회원A.getId()로 하면 에러 발생함
-                        Map.of("userId", 3, "name", "회원B", "time", 0),
-                        Map.of("userId", 4, "name", "회원C", "time", 0),
-                        Map.of("userId", 5, "name", "회원D", "time", 30))))
+                        Map.of("userId", 회원A.getId().intValue(), "name", "회원A", "time",  0), // todo: 회원A.getId()로 하면 에러 발생함 - 회원A.getId().intValue()는 테스트 통과... 왜지?
+                        Map.of("userId", 회원B.getId().intValue(), "name", "회원B", "time", 0),
+                        Map.of("userId", 회원C.getId().intValue(), "name", "회원C", "time", 0),
+                        Map.of("userId", 회원D.getId().intValue(), "name", "회원D", "time", 30))))
                 .andDo(print());
     }
 
