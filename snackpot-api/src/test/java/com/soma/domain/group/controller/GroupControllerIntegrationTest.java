@@ -2,7 +2,11 @@ package com.soma.domain.group.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.soma.common.constant.Status;
-
+import com.soma.domain.exercise.entity.Exercise;
+import com.soma.domain.exercise.factory.entity.ExerciseFactory;
+import com.soma.domain.exercise.repository.ExerciseRepository;
+import com.soma.domain.exercise_record.factory.entity.ExerciseRecordFactory;
+import com.soma.domain.exercise_record.repository.ExerciseRecordRepository;
 import com.soma.domain.group.dto.request.GroupCreateRequest;
 import com.soma.domain.group.dto.request.GroupJoinRequest;
 import com.soma.domain.group.entity.Group;
@@ -14,9 +18,11 @@ import com.soma.domain.joinlist.repository.JoinListRepository;
 import com.soma.domain.member.entity.Member;
 import com.soma.domain.member.factory.entity.MemberFactory;
 import com.soma.domain.member.repository.MemberRepository;
+import com.soma.domain.youtuber.entity.Youtuber;
+import com.soma.domain.youtuber.factory.entity.YoutuberFactory;
+import com.soma.domain.youtuber.repository.YoutuberRepository;
 import com.soma.joinlist.factory.JoinListFactory;
-
-
+import org.hamcrest.Matchers;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -33,7 +39,6 @@ import org.springframework.web.context.WebApplicationContext;
 
 import java.time.LocalDate;
 import java.util.List;
-
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers.springSecurity;
@@ -52,14 +57,13 @@ public class GroupControllerIntegrationTest {
     @Autowired
     private MockMvc mockMvc;
 
-    @Autowired
-    private WebApplicationContext context;
-    @Autowired
-    private GroupRepository groupRepository;
-    @Autowired
-    private MemberRepository memberRepository;
-    @Autowired
-    private JoinListRepository joinListRepository;
+    @Autowired private WebApplicationContext context;
+    @Autowired private GroupRepository groupRepository;
+    @Autowired private MemberRepository memberRepository;
+    @Autowired private JoinListRepository joinListRepository;
+    @Autowired private ExerciseRepository exerciseRepository;
+    @Autowired private ExerciseRecordRepository exerciseRecordRepository;
+    @Autowired private YoutuberRepository youtuberRepository;
 //    @Autowired
 //    private TestInitDB initDB;
     @Autowired
@@ -215,4 +219,42 @@ public class GroupControllerIntegrationTest {
                 .andExpect(jsonPath("$.result.data.content[0].groupId").value(그룹E.getId()))
                 .andDo(print());
     }
+
+    @Test
+    @DisplayName("그룹에서 오늘 운동을 수행하지 않은 회원 목록을 조회한다.")
+    @WithMockUser(username = "test@naver.com")
+    void readAllAbsentees() throws Exception {
+        //given
+        Group 그룹 = GroupFactory.createGroup();
+        groupRepository.save(그룹);
+
+        Member 회원A = MemberFactory.createUserRoleMemberWithNameAndEmail("회원A", "A@gmail.com");
+        Member 회원B = MemberFactory.createUserRoleMemberWithNameAndEmail("회원B", "B@gmail.com");
+        Member 회원C = MemberFactory.createUserRoleMemberWithNameAndEmail("회원C", "C@gmail.com");
+        memberRepository.saveAll(List.of(회원A, 회원B, 회원C));
+
+        joinListRepository.save(JoinListFactory.createHostJoinList(회원A, 그룹));
+        joinListRepository.save(JoinListFactory.createMemberJoinList(회원B, 그룹));
+        joinListRepository.save(JoinListFactory.createMemberJoinList(회원C, 그룹));
+
+        Youtuber 유튜버 = YoutuberFactory.createYoutuber();
+        youtuberRepository.save(유튜버);
+
+        Exercise 운동 = ExerciseFactory.createExerciseWithYoutuber(유튜버);
+        exerciseRepository.save(운동);
+
+        exerciseRecordRepository.save(ExerciseRecordFactory.createExerciseRecordWithExerciseAndMember(운동, 회원A));
+
+        //when //then
+        mockMvc.perform(
+                        get("/groups/{groupId}/absentees", 그룹.getId())
+                                .contentType(MediaType.APPLICATION_JSON)
+                )
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.success").value("true"))
+                .andExpect(jsonPath("$.code").value("0"))
+                .andExpect(jsonPath("$.result.data.usernames", Matchers.containsInAnyOrder("회원B", "회원C")))
+                .andDo(print());
+    }
+
 }
