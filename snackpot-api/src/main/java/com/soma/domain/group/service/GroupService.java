@@ -1,8 +1,10 @@
 package com.soma.domain.group.service;
 
 import com.soma.common.constant.Status;
+import com.soma.domain.exercise_record.repository.ExerciseRecordRepository;
 import com.soma.domain.group.dto.request.GroupCreateRequest;
 import com.soma.domain.group.dto.request.GroupJoinRequest;
+import com.soma.domain.group.dto.response.GroupAbsenteeResponse;
 import com.soma.domain.group.dto.response.GroupListResponse;
 import com.soma.domain.group.dto.response.GroupNameResponse;
 import com.soma.domain.group.entity.Group;
@@ -31,6 +33,7 @@ public class GroupService {
     private final GroupRepository groupRepository;
     private final JoinListRepository joinListRepository;
     private final MemberRepository memberRepository;
+    private final ExerciseRecordRepository exerciseRecordRepository;
 
     @Transactional
     public GroupNameResponse create(GroupCreateRequest request, String email) {
@@ -62,5 +65,12 @@ public class GroupService {
         }else{
             return groupRepository.findAllByCursor(member, groupIdCursor, PageRequest.of(0, size));
         }
+    }
+
+    public GroupAbsenteeResponse readAllAbsentees(Long groupId) {
+        if(!groupRepository.existsById(groupId)){
+            throw new GroupNotFoundException();
+        }
+        return GroupAbsenteeResponse.toDto(joinListRepository.findAllAbsenteesByGroupId(groupId).stream().map(Member::getName).toList());
     }
 }
