@@ -5,6 +5,7 @@ import com.soma.common.constant.Status;
 import com.soma.domain.exercise.entity.Exercise;
 import com.soma.domain.exercise.factory.entity.ExerciseFactory;
 import com.soma.domain.exercise.repository.ExerciseRepository;
+import com.soma.domain.exercise_record.entity.ExerciseRecord;
 import com.soma.domain.exercise_record.factory.entity.ExerciseRecordFactory;
 import com.soma.domain.exercise_record.repository.ExerciseRecordRepository;
 import com.soma.domain.group.dto.request.GroupCreateRequest;
@@ -23,7 +24,6 @@ import com.soma.domain.youtuber.entity.Youtuber;
 import com.soma.domain.youtuber.factory.entity.YoutuberFactory;
 import com.soma.domain.youtuber.repository.YoutuberRepository;
 import com.soma.joinlist.factory.JoinListFactory;
-import org.assertj.core.groups.Tuple;
 import org.hamcrest.Matchers;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -40,6 +40,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.context.WebApplicationContext;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
 
@@ -227,18 +228,19 @@ public class GroupControllerIntegrationTest {
     @DisplayName("그룹에서 오늘 운동을 수행하지 않은 회원 목록을 조회한다.")
     @WithMockUser(username = "test@naver.com")
     void readAllAbsentees() throws Exception {
-        //given
         Group 그룹 = GroupFactory.createGroup();
         groupRepository.save(그룹);
 
         Member 회원A = MemberFactory.createUserRoleMemberWithNameAndEmail("회원A", "A@gmail.com");
         Member 회원B = MemberFactory.createUserRoleMemberWithNameAndEmail("회원B", "B@gmail.com");
         Member 회원C = MemberFactory.createUserRoleMemberWithNameAndEmail("회원C", "C@gmail.com");
-        memberRepository.saveAll(List.of(회원A, 회원B, 회원C));
+        Member 회원D = MemberFactory.createUserRoleMemberWithNameAndEmail("회원D", "D@gmail.com");
+        memberRepository.saveAll(List.of(회원A, 회원B, 회원C, 회원D));
 
         joinListRepository.save(JoinListFactory.createHostJoinList(회원A, 그룹));
         joinListRepository.save(JoinListFactory.createMemberJoinList(회원B, 그룹));
         joinListRepository.save(JoinListFactory.createMemberJoinList(회원C, 그룹));
+        joinListRepository.save(JoinListFactory.createMemberJoinList(회원D, 그룹));
 
         Youtuber 유튜버 = YoutuberFactory.createYoutuber();
         youtuberRepository.save(유튜버);
@@ -246,7 +248,11 @@ public class GroupControllerIntegrationTest {
         Exercise 운동 = ExerciseFactory.createExerciseWithYoutuber(유튜버);
         exerciseRepository.save(운동);
 
-        exerciseRecordRepository.save(ExerciseRecordFactory.createExerciseRecordWithExerciseAndMember(운동, 회원A));
+        ExerciseRecord 기록1 = ExerciseRecordFactory.createExerciseRecordWithExerciseAndMember(운동, 회원A);
+        ExerciseRecord 기록2 = ExerciseRecordFactory.createExerciseRecordWithExerciseAndMember(운동, 회원D);
+        exerciseRecordRepository.saveAll(List.of(기록1, 기록2));
+        LocalDateTime 하루전날 = LocalDateTime.now().minusDays(1);
+        기록2.updateCreatedAt(하루전날);
 
         //when //then
         mockMvc.perform(
@@ -258,7 +264,8 @@ public class GroupControllerIntegrationTest {
                 .andExpect(jsonPath("$.code").value("0"))
                 .andExpect(jsonPath("$.result.data", Matchers.containsInAnyOrder(
                         Map.of("name", "회원B", "profileImage", MemberFixtures.프로필사진),
-                        Map.of("name", "회원C", "profileImage", MemberFixtures.프로필사진))))
+                        Map.of("name", "회원C", "profileImage", MemberFixtures.프로필사진),
+                        Map.of("name", "회원D", "profileImage", MemberFixtures.프로필사진))))
                 .andDo(print());
     }
 

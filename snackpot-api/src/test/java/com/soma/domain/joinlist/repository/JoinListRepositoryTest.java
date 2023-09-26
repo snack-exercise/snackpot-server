@@ -4,6 +4,7 @@ import com.soma.config.QueryDSLConfig;
 import com.soma.domain.exercise.entity.Exercise;
 import com.soma.domain.exercise.factory.entity.ExerciseFactory;
 import com.soma.domain.exercise.repository.ExerciseRepository;
+import com.soma.domain.exercise_record.entity.ExerciseRecord;
 import com.soma.domain.exercise_record.factory.entity.ExerciseRecordFactory;
 import com.soma.domain.exercise_record.repository.ExerciseRecordRepository;
 import com.soma.domain.group.entity.Group;
@@ -26,6 +27,7 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.context.annotation.Import;
 import org.springframework.test.context.ActiveProfiles;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @DataJpaTest
@@ -91,11 +93,13 @@ class JoinListRepositoryTest {
         Member 회원A = MemberFactory.createUserRoleMemberWithNameAndEmail("회원A", "A@gmail.com");
         Member 회원B = MemberFactory.createUserRoleMemberWithNameAndEmail("회원B", "B@gmail.com");
         Member 회원C = MemberFactory.createUserRoleMemberWithNameAndEmail("회원C", "C@gmail.com");
-        memberRepository.saveAll(List.of(회원A, 회원B, 회원C));
+        Member 회원D = MemberFactory.createUserRoleMemberWithNameAndEmail("회원D", "D@gmail.com");
+        memberRepository.saveAll(List.of(회원A, 회원B, 회원C, 회원D));
 
         joinListRepository.save(JoinListFactory.createHostJoinList(회원A, 그룹));
         joinListRepository.save(JoinListFactory.createMemberJoinList(회원B, 그룹));
         joinListRepository.save(JoinListFactory.createMemberJoinList(회원C, 그룹));
+        joinListRepository.save(JoinListFactory.createMemberJoinList(회원D, 그룹));
 
         Youtuber 유튜버 = YoutuberFactory.createYoutuber();
         youtuberRepository.save(유튜버);
@@ -103,16 +107,24 @@ class JoinListRepositoryTest {
         Exercise 운동 = ExerciseFactory.createExerciseWithYoutuber(유튜버);
         exerciseRepository.save(운동);
 
-        exerciseRecordRepository.save(ExerciseRecordFactory.createExerciseRecordWithExerciseAndMember(운동, 회원A));
+        ExerciseRecord 기록1 = ExerciseRecordFactory.createExerciseRecordWithExerciseAndMember(운동, 회원A);
+        ExerciseRecord 기록2 = ExerciseRecordFactory.createExerciseRecordWithExerciseAndMember(운동, 회원D);
+        exerciseRecordRepository.saveAll(List.of(기록1, 기록2));
+        LocalDateTime 하루전날 = LocalDateTime.now().minusDays(1);
+        기록2.updateCreatedAt(하루전날);
 
         //when
-        List<Member> result = joinListRepository.findAllAbsenteesByGroupId(그룹.getId());
+        LocalDateTime today = LocalDateTime.now().withHour(0).withMinute(0).withSecond(0);// 오늘 자정 구일하기
+        LocalDateTime nextDay = today.plusDays(1);// 내일 자정 구하기
+        List<Member> result = joinListRepository.findAllAbsenteesByGroupId(그룹.getId(), today, nextDay);
 
         //then
-        Assertions.assertThat(result).hasSize(2)
+        Assertions.assertThat(result).hasSize(3)
                 .extracting("name")
                 .containsExactlyInAnyOrder(
-                        "회원B", "회원C"
+                        "회원B", "회원C", "회원D"
                 );
+
+        Assertions.assertThat(기록2.getCreatedAt()).isEqualTo(하루전날);
     }
 }

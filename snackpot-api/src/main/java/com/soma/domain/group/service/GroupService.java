@@ -24,6 +24,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Slf4j
@@ -72,6 +73,8 @@ public class GroupService {
         if(!groupRepository.existsById(groupId)){
             throw new GroupNotFoundException();
         }
-        return joinListRepository.findAllAbsenteesByGroupId(groupId).stream().map(GroupAbsenteeResponse::toDto).toList();
+        LocalDateTime today = LocalDateTime.now().withHour(0).withMinute(0).withSecond(0);// 오늘 자정 구일하기
+        LocalDateTime nextDay = today.plusDays(1);// 내일 자정 구하기
+        return joinListRepository.findAllAbsenteesByGroupId(groupId, today, nextDay).stream().map(GroupAbsenteeResponse::toDto).toList();
     }
 }
