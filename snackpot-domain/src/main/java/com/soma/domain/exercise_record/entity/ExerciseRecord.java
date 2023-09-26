@@ -21,9 +21,12 @@ public class ExerciseRecord extends BaseEntity {
     @ManyToOne(fetch = FetchType.LAZY)
     private Exercise exercise;
 
+    private Integer time;
+
     @Builder
-    public ExerciseRecord(Member member, Exercise exercise) {
+    public ExerciseRecord(Member member, Exercise exercise, Integer time) {
         this.member = member;
         this.exercise = exercise;
+        this.time = time;
     }
 }
