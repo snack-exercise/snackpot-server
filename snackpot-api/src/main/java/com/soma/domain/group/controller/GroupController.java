@@ -43,6 +43,12 @@ public class GroupController {
     public Response readAllAbsentees(@PathVariable Long groupId, @AuthenticationPrincipal UserDetails loginUser){
         return Response.success(groupService.readAllAbsentees(groupId));
     }
+
+    @ResponseStatus(HttpStatus.OK)
+    @GetMapping("/{groupId}/statistics")
+    public Response readExerciseTimeStatics(@PathVariable Long groupId, @AuthenticationPrincipal UserDetails loginUser){
+        return Response.success(groupService.readExerciseTimeStatics(groupId));
+    }
 }
 
 
