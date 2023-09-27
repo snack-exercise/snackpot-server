@@ -306,11 +306,6 @@ public class GroupControllerIntegrationTest {
         기록B.updateCreatedAt(수);
         기록D.updateCreatedAt(일);
 
-        List<Member> all = memberRepository.findAll();
-        for (Member member : all) {
-            System.out.println("member = " + member.getName() + ", " + member.getId());
-        }
-
         //when //then
         mockMvc.perform(
                         get("/groups/{groupId}/statistics", 그룹.getId())
