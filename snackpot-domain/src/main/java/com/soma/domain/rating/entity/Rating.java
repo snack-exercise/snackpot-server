@@ -1,4 +1,4 @@
-package com.soma.domain.exercise_record.entity;
+package com.soma.domain.rating.entity;
 
 import com.soma.common.BaseEntity;
 import com.soma.domain.exercise.entity.Exercise;
@@ -10,7 +10,7 @@ import lombok.*;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
 @Entity
-public class ExerciseRecord extends BaseEntity {
+public class Rating extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -21,12 +21,14 @@ public class ExerciseRecord extends BaseEntity {
     @ManyToOne(fetch = FetchType.LAZY)
     private Exercise exercise;
 
-    private Integer time;
+    @Enumerated(EnumType.STRING)
+    private RatingType ratingType;
 
     @Builder
-    public ExerciseRecord(Member member, Exercise exercise, Integer time) {
+    public Rating(Member member, Exercise exercise, RatingType ratingType) {
         this.member = member;
         this.exercise = exercise;
-        this.time = time;
+        this.ratingType = ratingType;
+        active();
     }
 }

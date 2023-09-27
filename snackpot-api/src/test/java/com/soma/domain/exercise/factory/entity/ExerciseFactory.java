@@ -6,7 +6,7 @@ import com.soma.domain.youtuber.entity.Youtuber;
 import static com.soma.domain.exercise.factory.fixtures.ExerciseFixtures.*;
 
 public class ExerciseFactory {
-    public static Exercise createExercise(Youtuber youtuber) {
+    public static Exercise createExerciseWithYoutuber(Youtuber youtuber) {
         return Exercise.builder()
                 .youtuber(youtuber)
                 .videoId(영상id)

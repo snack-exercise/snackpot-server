@@ -44,7 +44,8 @@ jobs:
         run: |
           cd ./snackpot-api
           touch ./.env
-          echo "${{ secrets.DEV_DOCKER_ENV }}" > ./.env
+          echo "${{ secrets.DEV_DOCKER_ENV }}" > .env
+          ls -al
         shell: bash
 
       # (4) ./gradlew 권한 설정

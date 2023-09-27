@@ -7,10 +7,11 @@ import com.soma.domain.group.entity.Group;
 import com.soma.domain.group.factory.entity.GroupFactory;
 import com.soma.domain.joinlist.repository.JoinListRepository;
 import com.soma.domain.member.entity.Member;
+import com.soma.domain.member.factory.entity.MemberFactory;
 import com.soma.domain.member.repository.MemberRepository;
 import com.soma.joinlist.factory.JoinListFactory;
 
-import com.soma.member.factory.entity.MemberFactory;
+
 
 import org.assertj.core.groups.Tuple;
 import org.junit.jupiter.api.DisplayName;
@@ -72,7 +73,7 @@ class GroupRepositoryCustomImplTest {
 
 
         //when
-        Slice<GroupListResponse> allByCursor = groupRepository.findAllByCursor(사용자A, 그룹D.getId(), LocalDate.of(2023, 9, 3), PageRequest.of(0, 2));
+        Slice<GroupListResponse> allByCursor = groupRepository.findAllByCursor(사용자A, 그룹D.getId(), PageRequest.of(0, 2));
 
         //then
         assertThat(allByCursor.getContent()).hasSize(2)
@@ -116,7 +117,7 @@ class GroupRepositoryCustomImplTest {
 
 
         //when
-        Slice<GroupListResponse> allByCursor = groupRepository.findAllByCursor(사용자A, 그룹B.getId(), LocalDate.of(2023, 9, 3), PageRequest.of(0, 2));
+        Slice<GroupListResponse> allByCursor = groupRepository.findAllByCursor(사용자A, 그룹B.getId(), PageRequest.of(0, 2));
 
         //then
         assertThat(allByCursor.getContent()).hasSize(1)
