@@ -72,13 +72,11 @@ public class GroupService {
         }
     }
 
-    public List<GroupAbsenteeResponse> readAllAbsentees(Long groupId) {
-        if(!groupRepository.existsById(groupId)){
-            throw new GroupNotFoundException();
-        }
+    public GroupAbsenteeResponse readAllAbsentees(Long groupId) {
+        Group group = groupRepository.findById(groupId).orElseThrow(GroupNotFoundException::new);
         LocalDateTime today = LocalDateTime.now().withHour(0).withMinute(0).withSecond(0);// 오늘 자정 구일하기
         LocalDateTime nextDay = today.plusDays(1);// 내일 자정 구하기
-        return joinListRepository.findAllAbsenteesByGroupId(groupId, today, nextDay).stream().map(GroupAbsenteeResponse::toDto).toList();
+        return GroupAbsenteeResponse.toDto(group.getCode(), joinListRepository.findAllAbsenteesByGroupId(groupId, today, nextDay).stream().map(GroupAbsenteeUser::toDto).toList());
     }
 
     public List<GroupTimeStaticsResponse> readExerciseTimeStatics(Long groupId) {
