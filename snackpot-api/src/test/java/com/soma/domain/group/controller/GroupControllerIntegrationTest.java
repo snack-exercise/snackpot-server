@@ -263,7 +263,8 @@ public class GroupControllerIntegrationTest {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.success").value("true"))
                 .andExpect(jsonPath("$.code").value("0"))
-                .andExpect(jsonPath("$.result.data", Matchers.containsInAnyOrder(
+                .andExpect(jsonPath("$.result.data.groupCode").value(그룹.getCode()))
+                .andExpect(jsonPath("$.result.data.absentees", Matchers.containsInAnyOrder(
                         Map.of("name", "회원B", "profileImage", MemberFixtures.프로필사진),
                         Map.of("name", "회원C", "profileImage", MemberFixtures.프로필사진),
                         Map.of("name", "회원D", "profileImage", MemberFixtures.프로필사진))))
