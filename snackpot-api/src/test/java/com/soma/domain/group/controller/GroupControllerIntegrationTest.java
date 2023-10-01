@@ -332,4 +332,59 @@ public class GroupControllerIntegrationTest {
                 .andDo(print());
     }
 
+    @Test
+    @DisplayName("그룹 내 일주일간 운동 수행 결과 표를 조회한다.")
+    @WithMockUser(username = "test@naver.com")
+    void readExerciseCheckListTest() throws Exception {
+        Group 그룹 = GroupFactory.createGroup();
+        groupRepository.save(그룹);
+
+        Member 회원A = MemberFactory.createUserRoleMemberWithNameAndEmailAndDailyGoalTime("회원A", "A@gmail.com", 10);
+        Member 회원B = MemberFactory.createUserRoleMemberWithNameAndEmailAndDailyGoalTime("회원B", "B@gmail.com", 20);
+        memberRepository.saveAll(List.of(회원A, 회원B));
+
+        joinListRepository.save(JoinListFactory.createHostJoinList(회원A, 그룹));
+        joinListRepository.save(JoinListFactory.createMemberJoinList(회원B, 그룹));
+
+        Youtuber 유튜버 = YoutuberFactory.createYoutuber();
+        youtuberRepository.save(유튜버);
+
+        Exercise 운동 = ExerciseFactory.createExerciseWithYoutuber(유튜버);
+        exerciseRepository.save(운동);
+
+        LocalDateTime 월 = LocalDateTime.of(2023, 9, 25, 0, 0, 0);
+        LocalDateTime 수 = LocalDateTime.of(2023, 9, 27, 0, 0, 0);
+        LocalDateTime 일 = LocalDateTime.of(2023, 10, 1, 0, 0, 0);
+
+        ExerciseRecord 기록A = ExerciseRecordFactory.createExerciseRecordWithExerciseAndMemberAndTime(운동, 회원A, 9);
+        ExerciseRecord 기록B = ExerciseRecordFactory.createExerciseRecordWithExerciseAndMemberAndTime(운동, 회원A, 11);
+        ExerciseRecord 기록C = ExerciseRecordFactory.createExerciseRecordWithExerciseAndMemberAndTime(운동, 회원B, 19);
+        ExerciseRecord 기록D = ExerciseRecordFactory.createExerciseRecordWithExerciseAndMemberAndTime(운동, 회원B, 21);
+        ExerciseRecord 기록E = ExerciseRecordFactory.createExerciseRecordWithExerciseAndMemberAndTime(운동, 회원B, 25);
+        exerciseRecordRepository.saveAll(List.of(기록A, 기록B, 기록C, 기록D, 기록E));
+        기록A.updateCreatedAt(월);
+        기록B.updateCreatedAt(수);
+        기록C.updateCreatedAt(월);
+        기록D.updateCreatedAt(수);
+        기록E.updateCreatedAt(일);
+
+        //when //then
+        mockMvc.perform(
+                        get("/groups/{groupId}/checklist", 그룹.getId())
+                                .contentType(MediaType.APPLICATION_JSON)
+                )
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.success").value("true"))
+                .andExpect(jsonPath("$.code").value("0"))
+                .andExpect(jsonPath("$.result.data[0].userId").value(회원A.getId()))
+                .andExpect(jsonPath("$.result.data[0].successNum").value(1))
+                .andExpect(jsonPath("$.result.data[0].checkList", hasSize(7)))
+                .andExpect(jsonPath("$.result.data[0].checkList[*]").value(Matchers.contains("PARTIAL", "UNCHECK", "CHECK", "UNCHECK", "UNCHECK", "UNCHECK", "UNCHECK")))
+                .andExpect(jsonPath("$.result.data[1].userId").value(회원B.getId()))
+                .andExpect(jsonPath("$.result.data[1].successNum").value(2))
+                .andExpect(jsonPath("$.result.data[1].checkList", hasSize(7)))
+                .andExpect(jsonPath("$.result.data[1].checkList").value(Matchers.contains("PARTIAL", "UNCHECK", "CHECK", "UNCHECK", "UNCHECK", "UNCHECK", "CHECK")))
+                .andDo(print());
+    }
+
 }
