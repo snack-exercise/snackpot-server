@@ -121,4 +121,11 @@ public class GroupService {
         int dayOfWeek = today.getDayOfWeek().getValue(); // 오늘 요일(숫자), 월(1), 일(7)
         return today.plusDays(8-dayOfWeek).withHour(0).withMinute(0).withSecond(0).withNano(0);
     }
+
+    @Transactional
+    public void delete(Long groupId) {
+        joinListRepository.deleteAllInBatch(joinListRepository.findAllByGroupId(groupId));
+        Group group = groupRepository.findById(groupId).orElseThrow(GroupNotFoundException::new);
+        groupRepository.delete(group);
+    }
 }
