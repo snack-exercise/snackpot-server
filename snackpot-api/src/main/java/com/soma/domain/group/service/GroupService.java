@@ -1,6 +1,7 @@
 package com.soma.domain.group.service;
 
 import com.soma.common.constant.Status;
+import com.soma.domain.exercise_record.dto.response.ExerciseCheckListResponse;
 import com.soma.domain.exercise_record.entity.ExerciseRecord;
 import com.soma.domain.exercise_record.repository.ExerciseRecordRepository;
 import com.soma.domain.group.dto.request.GroupCreateRequest;
@@ -24,10 +25,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Slf4j
@@ -120,5 +118,54 @@ public class GroupService {
         LocalDateTime today = LocalDateTime.now().withHour(0).withMinute(0).withSecond(0);// 오늘 자정
         int dayOfWeek = today.getDayOfWeek().getValue(); // 오늘 요일(숫자), 월(1), 일(7)
         return today.plusDays(8-dayOfWeek).withHour(0).withMinute(0).withSecond(0).withNano(0);
+    }
+
+    public List<ExerciseCheckListResponse> readExerciseCheckList(Long groupId) {
+        if(!groupRepository.existsById(groupId)){
+            throw new GroupNotFoundException();
+        }
+        LocalDateTime startDate = getStartLocalDateTimeOfWeek();
+        LocalDateTime endDate = getEndLocalDateTimeOfWeek();
+        List<ExerciseRecord> result = exerciseRecordRepository.findWeekExerciseTimeStatics(groupId, startDate, endDate);
+        List<Member> members = joinListRepository.findAllMembersByGroupId(groupId);
+
+        // 각 회원마다 요일별 총 운동시간 계산을 위한, Map 생성
+        Map<Member, Map<LocalDate, UserTimeStaticsResponse>> map = new HashMap<>();
+        for (Member member : members) {
+            HashMap<LocalDate, UserTimeStaticsResponse> secondMap = new HashMap<>();
+            for(int i=0; i<7; i++){
+                LocalDate localDate = startDate.plusDays(i).toLocalDate();
+                secondMap.put(localDate, UserTimeStaticsResponse.toDto(member, 0));
+            }
+            map.put(member, secondMap);
+        }
+
+        // 각 회원 마다 요일별 총 운동 시간 계산
+        for (ExerciseRecord exerciseRecord : result) {
+            map.get(exerciseRecord.getMember()).get(exerciseRecord.getCreatedAt().toLocalDate()).add(exerciseRecord.getTime());
+        }
+
+        // map의 데이터로 dto 생성
+        Collections.sort(members, new MemberIdAscComparator()); // memberId기준 오름차순 정렬
+        List<ExerciseCheckListResponse> response = new ArrayList<>();
+        for (Member member : members) {
+            ExerciseCheckListResponse dto = ExerciseCheckListResponse.toDto(member);
+            for (LocalDate localDate : map.get(member).keySet()) {
+                dto.updateCheckList(member, localDate, map.get(member).get(localDate));
+            }
+            dto.updateSuccessNum();
+            response.add(dto);
+        }
+        return response;
+    }
+}
+
+class MemberIdAscComparator implements Comparator<Member>{
+    @Override
+    public int compare(Member m1, Member m2) {
+        if(m1.getId() < m2.getId()){
+            return -1;
+        }
+        return 1;
     }
 }
