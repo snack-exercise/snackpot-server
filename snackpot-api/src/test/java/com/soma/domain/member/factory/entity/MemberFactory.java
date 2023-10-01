@@ -30,4 +30,16 @@ public class MemberFactory {
                 .fcmToken(FCM토큰)
                 .build();
     }
+
+    public static Member createUserRoleMemberWithNameAndEmailAndDailyGoalTime(String name, String email, Integer dailyGoalTime){
+        return Member.builder()
+                .name(name)
+                .dailyGoalTime(dailyGoalTime)
+                .email(email)
+                .profileImg(프로필사진)
+                .password(비밀번호)
+                .roleType(일반권한)
+                .fcmToken(FCM토큰)
+                .build();
+    }
 }
