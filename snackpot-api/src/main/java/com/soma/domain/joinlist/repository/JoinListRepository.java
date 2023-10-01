@@ -19,4 +19,6 @@ public interface JoinListRepository extends JpaRepository<JoinList, Long>{
 
     @Query("select j.member from JoinList j where j.group.id = :groupId and j.status = 'ACTIVE'")
     List<Member> findAllMembersByGroupId(@Param("groupId") Long groupId);
+
+    List<JoinList> findAllByGroupId(Long groupId);
 }
