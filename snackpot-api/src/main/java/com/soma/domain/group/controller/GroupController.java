@@ -62,6 +62,15 @@ public class GroupController {
     public Response readExerciseTimeStatics(@PathVariable(value = "groupId") Long groupId, @AuthenticationPrincipal UserDetails loginUser){
         return Response.success(groupService.readExerciseTimeStatics(groupId));
     }
+
+    @Operation(summary = "그룹 삭제", description = "그룹을 삭제합니다.", security = { @SecurityRequirement(name = "Authorization") })
+    @Parameter(name = "groupId", description = "운동 그룹 ID",  required = true,  in = ParameterIn.PATH)
+    @ResponseStatus(HttpStatus.OK)
+    @DeleteMapping("/{groupId}")
+    public Response delete(@PathVariable(value = "groupId") Long groupId, @AuthenticationPrincipal UserDetails loginUser){
+        groupService.delete(groupId);
+        return Response.success();
+    }
 }
 
 
