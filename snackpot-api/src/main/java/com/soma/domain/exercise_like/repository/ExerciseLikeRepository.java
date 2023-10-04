@@ -7,4 +7,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface ExerciseLikeRepository extends JpaRepository<ExerciseLike, Long> {
     Boolean existsByMemberAndExercise(Member member, Exercise exercise);
+
+    void deleteByMemberAndExercise(Member member, Exercise exercise);
 }
