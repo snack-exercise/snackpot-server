@@ -18,11 +18,11 @@ public class ExerciseBodyPart extends BaseEntity {
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
-//    @JoinColumn(name = "exerciseId")
+    @JoinColumn(name = "exerciseId")
     private Exercise exercise;
 
     @ManyToOne(fetch = FetchType.LAZY)
-//    @JoinColumn(name = "bodyPartId")
+    @JoinColumn(name = "bodyPartId")
     private BodyPart bodyPart;
 
     @Builder
