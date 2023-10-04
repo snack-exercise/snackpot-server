@@ -17,7 +17,7 @@ public class ExerciseResponse {
     private String title;
     private String youtuberName;
     private Integer timeSpent;
-    private List<BodyPartType> bodyPartType;
+    private List<BodyPartType> bodyPartTypes;
     private Level level;
     private Integer calories;
     private Boolean isLiked;

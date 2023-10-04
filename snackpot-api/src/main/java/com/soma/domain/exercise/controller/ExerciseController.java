@@ -17,8 +17,8 @@ public class ExerciseController {
 
     @GetMapping
     public Response readAllByCondition(
-            ExerciseReadCondition condition,
-            int size,
+            @ModelAttribute ExerciseReadCondition condition,
+            @RequestParam int size,
             @AuthenticationPrincipal UserDetails loginUser
     ) {
         return Response.success(exerciseService.readAllByCondition(condition, size, loginUser.getUsername()));

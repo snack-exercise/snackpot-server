@@ -14,6 +14,15 @@ dependencies {
     testImplementation 'org.junit.jupiter:junit-jupiter'
     // snackpot-domain 모듈
     implementation project(':snackpot-domain')
+
+    // spring-batch
+    implementation("org.springframework.boot:spring-boot-starter-batch")
+    testImplementation("org.springframework.batch:spring-batch-test")
+
+    // youtube API
+    implementation 'com.google.api-client:google-api-client:1.31.5'
+    implementation 'com.google.apis:google-api-services-youtube:v3-rev222-1.25.0'
+    testImplementation 'org.junit.jupiter:junit-jupiter:5.8.1'
 }
 
 test {
@@ -26,5 +35,5 @@ bootJar {
 }
 
 jar {
-    enabled = true
+    enabled = false
 }
