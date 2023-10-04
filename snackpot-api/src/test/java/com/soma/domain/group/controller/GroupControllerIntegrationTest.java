@@ -294,9 +294,9 @@ public class GroupControllerIntegrationTest {
         Exercise 운동 = ExerciseFactory.createExerciseWithYoutuber(유튜버);
         exerciseRepository.save(운동);
 
-        LocalDateTime 월 = LocalDateTime.of(2023, 9, 25, 0, 0, 0);
-        LocalDateTime 수 = LocalDateTime.of(2023, 9, 27, 0, 0, 0);
-        LocalDateTime 일 = LocalDateTime.of(2023, 10, 1, 0, 0, 0);
+        LocalDateTime 월 = localDateTimeOfThisWeek(1);
+        LocalDateTime 수 = localDateTimeOfThisWeek(3);
+        LocalDateTime 일 = localDateTimeOfThisWeek(7);
 
         ExerciseRecord 기록A = ExerciseRecordFactory.createExerciseRecordWithExerciseAndMemberAndTime(운동, 회원A, 10);
         ExerciseRecord 기록B = ExerciseRecordFactory.createExerciseRecordWithExerciseAndMemberAndTime(운동, 회원B, 20);
@@ -315,7 +315,7 @@ public class GroupControllerIntegrationTest {
                 .andExpect(jsonPath("$.success").value("true"))
                 .andExpect(jsonPath("$.code").value("0"))
                 .andExpect(jsonPath("$.result.data[0].day").value("mon"))
-                .andExpect(jsonPath("$.result.data[0].date").value("2023-09-25"))
+                .andExpect(jsonPath("$.result.data[0].date").value(월.toLocalDate().toString()))
                 .andExpect(jsonPath("$.result.data[0].statics", hasSize(4)))
                 .andExpect(jsonPath("$.result.data[0].statics", Matchers.containsInAnyOrder(
                         Map.of("userId", 회원A.getId().intValue(), "name", "회원A", "time",  10), // todo: 회원A.getId()로 하면 에러 발생함
@@ -323,7 +323,7 @@ public class GroupControllerIntegrationTest {
                         Map.of("userId", 회원C.getId().intValue(), "name", "회원C", "time", 0),
                         Map.of("userId", 회원D.getId().intValue(), "name", "회원D", "time", 0))))
                 .andExpect(jsonPath("$.result.data[6].day").value("sun"))
-                .andExpect(jsonPath("$.result.data[6].date").value("2023-10-01"))
+                .andExpect(jsonPath("$.result.data[6].date").value(일.toLocalDate().toString()))
                 .andExpect(jsonPath("$.result.data[6].statics", Matchers.containsInAnyOrder(
                         Map.of("userId", 회원A.getId().intValue(), "name", "회원A", "time",  0), // todo: 회원A.getId()로 하면 에러 발생함 - 회원A.getId().intValue()는 테스트 통과... 왜지?
                         Map.of("userId", 회원B.getId().intValue(), "name", "회원B", "time", 0),
@@ -352,9 +352,9 @@ public class GroupControllerIntegrationTest {
         Exercise 운동 = ExerciseFactory.createExerciseWithYoutuber(유튜버);
         exerciseRepository.save(운동);
 
-        LocalDateTime 월 = LocalDateTime.of(2023, 9, 25, 0, 0, 0);
-        LocalDateTime 수 = LocalDateTime.of(2023, 9, 27, 0, 0, 0);
-        LocalDateTime 일 = LocalDateTime.of(2023, 10, 1, 0, 0, 0);
+        LocalDateTime 월 = localDateTimeOfThisWeek(1);
+        LocalDateTime 수 = localDateTimeOfThisWeek(3);
+        LocalDateTime 일 = localDateTimeOfThisWeek(7);
 
         ExerciseRecord 기록A = ExerciseRecordFactory.createExerciseRecordWithExerciseAndMemberAndTime(운동, 회원A, 9);
         ExerciseRecord 기록B = ExerciseRecordFactory.createExerciseRecordWithExerciseAndMemberAndTime(운동, 회원A, 11);
@@ -374,6 +374,7 @@ public class GroupControllerIntegrationTest {
                                 .contentType(MediaType.APPLICATION_JSON)
                 )
                 .andExpect(status().isOk())
+                .andDo(print())
                 .andExpect(jsonPath("$.success").value("true"))
                 .andExpect(jsonPath("$.code").value("0"))
                 .andExpect(jsonPath("$.result.data[0].userId").value(회원A.getId()))
@@ -383,8 +384,8 @@ public class GroupControllerIntegrationTest {
                 .andExpect(jsonPath("$.result.data[1].userId").value(회원B.getId()))
                 .andExpect(jsonPath("$.result.data[1].successNum").value(2))
                 .andExpect(jsonPath("$.result.data[1].checkList", hasSize(7)))
-                .andExpect(jsonPath("$.result.data[1].checkList").value(Matchers.contains("PARTIAL", "UNCHECK", "CHECK", "UNCHECK", "UNCHECK", "UNCHECK", "CHECK")))
-                .andDo(print());
+                .andExpect(jsonPath("$.result.data[1].checkList").value(Matchers.contains("PARTIAL", "UNCHECK", "CHECK", "UNCHECK", "UNCHECK", "UNCHECK", "CHECK")));
+//                .andDo(print());
     }
     
     @Test
@@ -427,5 +428,14 @@ public class GroupControllerIntegrationTest {
         assertThat(afterGroupSize).isEqualTo(0);
         assertThat(afterMemberSize).isEqualTo(5);
     }
+
+    // 요일에 해당하는 숫자를 입력하면, 이번주의 특정 요일 날짜를 가져온다. 월 1, 일 7
+    private LocalDateTime localDateTimeOfThisWeek(int dayOfWeekNum){
+        LocalDateTime today = LocalDateTime.now().withHour(0).withMinute(0).withSecond(0);// 오늘 자정
+        int dayOfWeek = today.getDayOfWeek().getValue(); // 오늘 요일(숫자), 월(1), 일(7)
+        LocalDateTime monday = today.minusDays(dayOfWeek-1).withHour(0).withMinute(0).withSecond(0).withNano(0);
+        return monday.plusDays(dayOfWeekNum - 1);
+    }
+
 
 }
