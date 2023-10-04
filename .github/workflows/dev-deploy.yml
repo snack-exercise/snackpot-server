@@ -51,14 +51,14 @@ jobs:
       ## (3-4) application-fcm.yml 생성
       - name: make application-fcm.yml
         run: |
-          cd ./src/main/resources
+          cd ./snackpot-api/src/main/resources
           touch ./application-fcm.yml
           echo "${{ secrets.APPLICATION_FCM_YML }}" > ./application-fcm.yml
         shell: bash
 
       ## (3-5) snackpot-fcm.json 생성
       - name: make snackpot-fcm.json
-        run: echo "${{ secrets.FCM_JSON_SECRET }}" | base64 --decode > ./src/main/resources/snackpot-fcm.json
+        run: echo "${{ secrets.FCM_JSON_SECRET }}" | base64 --decode > ./snackpot-api/src/main/resources/snackpot-fcm.json
         shell: bash
 
       # (4) ./gradlew 권한 설정
