@@ -62,6 +62,14 @@ public class GroupController {
     public Response readExerciseTimeStatics(@PathVariable(value = "groupId") Long groupId, @AuthenticationPrincipal UserDetails loginUser){
         return Response.success(groupService.readExerciseTimeStatics(groupId));
     }
+
+    @Operation(summary = "그룹 일주일 운동 수행 결과표 조회", description = "그룹 일주일 운동 수행 결과표를 조회합니다.", security = { @SecurityRequirement(name = "Authorization") })
+    @Parameter(name = "groupId", description = "운동 그룹 ID",  required = true,  in = ParameterIn.PATH)
+    @ResponseStatus(HttpStatus.OK)
+    @GetMapping("/{groupId}/checklist")
+    public Response readExerciseCheckList(@PathVariable(value = "groupId") Long groupId, @AuthenticationPrincipal UserDetails loginUser){
+        return Response.success(groupService.readExerciseCheckList(groupId));
+    }
 }
 
 
