@@ -39,13 +39,26 @@ jobs:
           echo "${{ secrets.APPLICATION_JWT_YML }}" > ./application-jwt.yml
         shell: bash
 
-      ## (3-2) .env 생성
+      ## (3-3) .env 생성
       - name: make .env
         run: |
           cd ./snackpot-api
           touch ./.env
           echo "${{ secrets.DEV_DOCKER_ENV }}" > .env
           ls -al
+        shell: bash
+
+      ## (3-4) application-fcm.yml 생성
+      - name: make application-fcm.yml
+        run: |
+          cd ./src/main/resources
+          touch ./application-fcm.yml
+          echo "${{ secrets.APPLICATION_FCM_YML }}" > ./application-fcm.yml
+        shell: bash
+
+      ## (3-5) snackpot-fcm.json 생성
+      - name: make snackpot-fcm.json
+        run: echo "${{ secrets.FCM_JSON_SECRET }}" | base64 --decode > ./src/main/resources/snackpot-fcm.json
         shell: bash
 
       # (4) ./gradlew 권한 설정
