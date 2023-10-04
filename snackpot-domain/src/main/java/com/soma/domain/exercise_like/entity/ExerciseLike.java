@@ -17,10 +17,10 @@ public class ExerciseLike extends BaseEntity {
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "memberId")
+//    @JoinColumn(name = "memberId")
     private Member member;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "exerciseId")
+//    @JoinColumn(name = "exerciseId")
     private Exercise exercise;
 }
