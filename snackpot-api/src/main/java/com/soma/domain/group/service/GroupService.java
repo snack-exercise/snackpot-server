@@ -118,6 +118,14 @@ public class GroupService {
         return today.plusDays(8-dayOfWeek).withHour(0).withMinute(0).withSecond(0).withNano(0);
     }
 
+
+    @Transactional
+    public void delete(Long groupId) {
+        joinListRepository.deleteAllInBatch(joinListRepository.findAllByGroupId(groupId));
+        Group group = groupRepository.findById(groupId).orElseThrow(GroupNotFoundException::new);
+        groupRepository.delete(group);
+    }
+  
     public List<ExerciseCheckListResponse> readExerciseCheckList(Long groupId) {
         if(!groupRepository.existsById(groupId)){
             throw new GroupNotFoundException();
@@ -156,6 +164,7 @@ public class GroupService {
         }
         return response;
     }
+    
 }
 
 class MemberIdAscComparator implements Comparator<Member>{

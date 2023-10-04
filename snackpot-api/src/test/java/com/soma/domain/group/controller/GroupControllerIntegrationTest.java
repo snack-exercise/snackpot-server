@@ -47,8 +47,7 @@ import java.util.Map;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.hamcrest.Matchers.hasSize;
 import static org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers.springSecurity;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -386,6 +385,47 @@ public class GroupControllerIntegrationTest {
                 .andExpect(jsonPath("$.result.data[1].checkList", hasSize(7)))
                 .andExpect(jsonPath("$.result.data[1].checkList").value(Matchers.contains("PARTIAL", "UNCHECK", "CHECK", "UNCHECK", "UNCHECK", "UNCHECK", "CHECK")))
                 .andDo(print());
+    }
+    
+    @Test
+    @DisplayName("그룹을 삭제한다.")
+    @WithMockUser(username = "test@naver.com")
+    void deleteGroupTest() throws Exception {
+        //given
+        Group 그룹 = GroupFactory.createGroup();
+        groupRepository.save(그룹);
+
+        Member 회원A = MemberFactory.createUserRoleMemberWithNameAndEmail("회원A", "A@gmail.com");
+        Member 회원B = MemberFactory.createUserRoleMemberWithNameAndEmail("회원B", "B@gmail.com");
+        Member 회원C = MemberFactory.createUserRoleMemberWithNameAndEmail("회원C", "C@gmail.com");
+        Member 회원D = MemberFactory.createUserRoleMemberWithNameAndEmail("회원D", "D@gmail.com");
+        memberRepository.saveAll(List.of(회원A, 회원B, 회원C, 회원D));
+
+        joinListRepository.save(JoinListFactory.createHostJoinList(회원A, 그룹));
+        joinListRepository.save(JoinListFactory.createMemberJoinList(회원B, 그룹));
+        joinListRepository.save(JoinListFactory.createMemberJoinList(회원C, 그룹));
+        joinListRepository.save(JoinListFactory.createMemberJoinList(회원D, 그룹));
+
+        int beforeJoinListSize = joinListRepository.findAll().size();
+        int beforeGroupSize = groupRepository.findAll().size();
+        int beforeMemberSize = memberRepository.findAll().size();
+
+        //when //then
+        mockMvc.perform(
+                        delete("/groups/{groupId}", 그룹.getId())
+                                .contentType(MediaType.APPLICATION_JSON)
+                )
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.success").value("true"))
+                .andExpect(jsonPath("$.code").value("0"))
+                .andDo(print());
+
+        int afterJoinListSize = joinListRepository.findAll().size();
+        int afterGroupSize = groupRepository.findAll().size();
+        int afterMemberSize = memberRepository.findAll().size();
+        assertThat(afterJoinListSize).isEqualTo(0);
+        assertThat(afterGroupSize).isEqualTo(0);
+        assertThat(afterMemberSize).isEqualTo(5);
     }
 
 }
