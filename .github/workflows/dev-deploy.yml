@@ -91,7 +91,7 @@ jobs:
           username: ${{ secrets.DEV_EC2_USERNAME }}
           key: ${{ secrets.DEV_KEY }}
           port: 22
-          source : "./src/main/resources/*"
+          source : "./snackpot-api/src/main/resources/*"
           target : "./snackApp"
           debug: true
 
