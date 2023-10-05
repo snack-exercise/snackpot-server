@@ -21,7 +21,11 @@ public class ExerciseController {
             @RequestParam int size,
             @AuthenticationPrincipal UserDetails loginUser
     ) {
-        return Response.success(exerciseService.readAllByCondition(condition, size, loginUser.getUsername()));
+        if (loginUser != null) {
+            return Response.success(exerciseService.readAllByCondition(condition, size, loginUser.getUsername()));
+        }else{
+            return Response.success(exerciseService.readAllByCondition(condition, size, null));
+        }
     }
 
     @PostMapping("/finish")
