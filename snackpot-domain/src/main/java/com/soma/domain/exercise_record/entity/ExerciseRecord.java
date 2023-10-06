@@ -30,5 +30,6 @@ public class ExerciseRecord extends BaseEntity {
         this.member = member;
         this.exercise = exercise;
         this.time = time;
+        active();
     }
 }

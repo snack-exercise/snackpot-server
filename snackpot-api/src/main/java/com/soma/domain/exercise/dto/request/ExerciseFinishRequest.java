@@ -16,6 +16,7 @@ public class ExerciseFinishRequest {
     public static ExerciseRecord toEntity(Exercise exercise, Member member) {
         return ExerciseRecord.builder()
                 .member(member)
-                .exercise(exercise).build();
+                .exercise(exercise)
+                .time(exercise.getTimeSpent()).build();
     }
 }
