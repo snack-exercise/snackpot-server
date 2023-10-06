@@ -5,8 +5,10 @@ import com.soma.domain.exercise_record.entity.ExerciseRecord;
 import com.soma.domain.member.entity.Member;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 @AllArgsConstructor
+@NoArgsConstructor
 @Getter
 public class ExerciseFinishRequest {
     private Long exerciseId;
