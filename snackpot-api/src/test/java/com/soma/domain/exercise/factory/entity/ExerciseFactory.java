@@ -18,4 +18,17 @@ public class ExerciseFactory {
                 .timeSpent(영상길이)
                 .build();
     }
+
+    public static Exercise createExerciseWithYoutuberAndVideoId(Youtuber youtuber, String videoId) {
+        return Exercise.builder()
+                .youtuber(youtuber)
+                .videoId(videoId)
+                .calories(칼로리)
+                .level(난이도)
+                .effect(효과)
+                .title(제목)
+                .thumbnail(썸네일)
+                .timeSpent(영상길이)
+                .build();
+    }
 }

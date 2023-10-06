@@ -28,7 +28,7 @@ import static com.soma.domain.youtuber.entity.QYoutuber.youtuber;
 public class ExerciseRepositoryImpl implements ExerciseRepositoryCustom {
     private final JPAQueryFactory jpaQueryFactory;
     @Override
-    public Slice<ExerciseResponse> findAllByCondition(ExerciseReadCondition exerciseReadCondition, int size, String email) {
+    public Slice<ExerciseResponse> findAllByCondition(ExerciseReadCondition exerciseReadCondition, List<BodyPartType> bodyPartTypes, int size, String email) {
 
         BooleanExpression isLikedExpression = email != null ?
                 JPAExpressions
@@ -51,10 +51,9 @@ public class ExerciseRepositoryImpl implements ExerciseRepositoryCustom {
                         isLikedExpression
                 ))
                 .from(exercise)
-                .leftJoin(youtuber).on(exercise.youtuber.id.eq(youtuber.id))
-                .leftJoin(exerciseBodyPart).on(exercise.id.eq(exerciseBodyPart.exercise.id));
+                .leftJoin(youtuber).on(exercise.youtuber.id.eq(youtuber.id));
 
-        List<ExerciseResponse> results = query.where(eqBodyPartTypes(exerciseReadCondition.getBodyPartTypes()))
+        List<ExerciseResponse> results = query.where(eqBodyPartTypes(bodyPartTypes))
                 .where(eqLevel(exerciseReadCondition.getLevel()))
                 .where(eqLike(exerciseReadCondition.getLike(), email))
                 .where(leTimeSpent(exerciseReadCondition.getTimeSpent()))
@@ -64,12 +63,12 @@ public class ExerciseRepositoryImpl implements ExerciseRepositoryCustom {
                 .fetch();
 
         for (ExerciseResponse er : results) {
-            List<BodyPartType> bodyPartTypes = jpaQueryFactory
+            List<BodyPartType> tempBodyPartTypes = jpaQueryFactory
                     .select(exerciseBodyPart.bodyPart.bodyPartType)
                     .from(exerciseBodyPart)
                     .where(exerciseBodyPart.exercise.id.eq(er.getExerciseId())).fetch();
 
-            er.updateBodyPartTypes(bodyPartTypes);
+            er.updateBodyPartTypes(tempBodyPartTypes);
         }
 
         boolean hasNext = results.size() > size;
@@ -84,7 +83,10 @@ public class ExerciseRepositoryImpl implements ExerciseRepositoryCustom {
         BooleanBuilder booleanBuilder = new BooleanBuilder();
         if (bodyPartTypes != null) {
             for (BodyPartType bodyPartType : bodyPartTypes) {
-                booleanBuilder.or(exerciseBodyPart.bodyPart.bodyPartType.eq(bodyPartType));
+                BooleanExpression expression = JPAExpressions.selectFrom(exerciseBodyPart)
+                        .where(exerciseBodyPart.exercise.id.eq(exercise.id)
+                                .and(exerciseBodyPart.bodyPart.bodyPartType.eq(bodyPartType))).exists();
+                booleanBuilder.or(expression);
             }
         }
 
