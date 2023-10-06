@@ -1,8 +1,11 @@
 package com.soma.domain.group.repository;
 
+import com.querydsl.jpa.JPAExpressions;
+import com.querydsl.jpa.JPQLQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import com.soma.domain.group.dto.response.GroupListResponse;
 import com.soma.domain.group.entity.Group;
+import com.soma.domain.group.entity.QGroup;
 import com.soma.domain.joinlist.entity.JoinList;
 import com.soma.domain.joinlist.entity.QJoinList;
 import com.soma.domain.member.entity.Member;
@@ -22,14 +25,15 @@ public class GroupRepositoryCustomImpl implements GroupRepositoryCustom{
     private final JPAQueryFactory jpaQueryFactory;
 
     @Override
-    public Slice<GroupListResponse> findAllByCursor(Member member, Long groupIdCursor, LocalDate startDateCursor, Pageable pageable) {
+    public Slice<GroupListResponse> findAllByCursor(Member member, Long groupIdCursor, Pageable pageable) {
         QJoinList subJoinList = new QJoinList("subJoinList");
+        QGroup subGroup = new QGroup("subGroup");
 
         List<Long> groupIds = jpaQueryFactory.select(subJoinList.group.id)
                 .from(subJoinList)
                 .where(subJoinList.member.eq(member)
-                        .and(((subJoinList.group.startDate).lt(startDateCursor)
-                                .or((subJoinList.group.startDate).eq(startDateCursor)).and((subJoinList.group.id).lt(groupIdCursor)))))
+                        .and(((subJoinList.group.startDate).lt(getStartDateByGroupId(groupIdCursor, subGroup))
+                        .or(((subJoinList.group.startDate).eq(getStartDateByGroupId(groupIdCursor, subGroup))).and((subJoinList.group.id).lt(groupIdCursor))))))
                 .orderBy(subJoinList.group.startDate.desc(), subJoinList.group.id.desc())
                 .limit(pageable.getPageSize() + 1)
                 .fetch();
@@ -45,6 +49,9 @@ public class GroupRepositoryCustomImpl implements GroupRepositoryCustom{
         return new SliceImpl<>(content, pageable, isHasNext(pageable, content));
     }
 
+    private static JPQLQuery<LocalDate> getStartDateByGroupId(Long groupIdCursor, QGroup subGroup) {
+        return JPAExpressions.select(subGroup.startDate).from(subGroup).where(subGroup.id.eq(groupIdCursor));
+    }
 
 
     @Override

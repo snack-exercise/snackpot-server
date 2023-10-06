@@ -18,7 +18,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import java.util.Optional;
 
 import static com.soma.domain.exercise.factory.dto.ExerciseFinishFactory.createExerciseFinishRequest;
-import static com.soma.domain.exercise.factory.entity.ExerciseFactory.createExercise;
+import static com.soma.domain.exercise.factory.entity.ExerciseFactory.createExerciseWithYoutuber;
 import static com.soma.domain.member.factory.entity.MemberFactory.createUserRoleMember;
 import static com.soma.domain.youtuber.factory.entity.YoutuberFactory.createYoutuber;
 import static org.mockito.ArgumentMatchers.*;
@@ -44,7 +44,7 @@ class ExerciseServiceTest {
         // given
         ExerciseFinishRequest request = createExerciseFinishRequest(ExerciseFixtures.운동id);
         given(memberRepository.findByEmailAndStatus(anyString(), any(Status.class))).willReturn(Optional.of(createUserRoleMember()));
-        given(exerciseRepository.findByIdAndStatus(anyLong(), any(Status.class))).willReturn(Optional.of(createExercise(createYoutuber())));
+        given(exerciseRepository.findByIdAndStatus(anyLong(), any(Status.class))).willReturn(Optional.of(createExerciseWithYoutuber(createYoutuber())));
 
         // when
         exerciseService.finish(request, MemberFixtures.이메일);

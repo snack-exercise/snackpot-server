@@ -45,5 +45,18 @@ public class Exercise extends BaseEntity {
         this.title = title;
         this.thumbnail = thumbnail;
         this.timeSpent = timeSpent;
+        active();
+    }
+
+    public void updateTitle(String title) {
+        this.title = title;
+    }
+
+    public void updateThumbnail(String thumbnail) {
+        this.thumbnail = thumbnail;
+    }
+
+    public void updateTimeSpent(Integer timeSpent) {
+        this.timeSpent = timeSpent;
     }
 }

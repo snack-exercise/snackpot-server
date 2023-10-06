@@ -6,6 +6,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @AllArgsConstructor
@@ -17,8 +18,23 @@ public class ExerciseResponse {
     private String title;
     private String youtuberName;
     private Integer timeSpent;
-    private List<BodyPartType> bodyPartType;
+    private List<BodyPartType> bodyPartTypes = new ArrayList<>();
     private Level level;
     private Integer calories;
     private Boolean isLiked;
+
+    public ExerciseResponse(Long exerciseId, String thumbnail, String title, String youtuberName, Integer timeSpent, Integer calories, Level level, Boolean isLiked) {
+        this.exerciseId = exerciseId;
+        this.thumbnail = thumbnail;
+        this.title = title;
+        this.youtuberName = youtuberName;
+        this.timeSpent = timeSpent;
+        this.calories = calories;
+        this.level = level;
+        this.isLiked = isLiked;
+    }
+
+    public void updateBodyPartTypes(List<BodyPartType> bodyPartTypes) {
+        this.bodyPartTypes = bodyPartTypes;
+    }
 }

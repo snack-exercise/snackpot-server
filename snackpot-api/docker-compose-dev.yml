@@ -7,10 +7,14 @@ services:
 #      - ~/docker-volume/mariadb/conf.d:/etc/mysql/conf.d
 #      - ~/docker-volume/mariadb/mysql:/var/lib/mysql
 #      - ~/docker-volume/mariadb/var/log/maria:/var/log/maria
-      - /mariadb/conf.d/my.conf:/etc/mysql/conf.d
-      - db-data:/var/lib/mysql
-    environment:
-      - .env
+      - type: bind
+        source: /mariadb/conf.d
+        target: /etc/mysql/conf.d
+      - type: volume
+        source: db-data
+        target: /var/lib/mysql
+    env_file:
+      - ./.env
     command: ['--character-set-server=utf8mb4', '--collation-server=utf8mb4_unicode_ci'] # 기본 charset utf8mb4로 설정(이모지 + 한글 가능)
     ports:
       - 3306:3306
