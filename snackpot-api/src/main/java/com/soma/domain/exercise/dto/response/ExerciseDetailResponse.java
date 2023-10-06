@@ -1,8 +1,8 @@
 package com.soma.domain.exercise.dto.response;
 
-import com.soma.domain.bodypart.entity.BodyPart;
 import com.soma.domain.exercise.entity.Exercise;
 import com.soma.domain.exercise.entity.Level;
+import com.soma.domain.exercise_bodypart.entity.ExerciseBodyPart;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
@@ -26,8 +26,8 @@ public class ExerciseDetailResponse {
     private Integer calories;
     private Boolean isLiked;
 
-    public static ExerciseDetailResponse toDto(Exercise exercise, List<BodyPart> bodyPartList, Boolean isLiked) {
-        List<String> bodyPartNames = bodyPartList.stream().map(bodyPart -> bodyPart.getBodyPartType().name()).collect(Collectors.toList());
+    public static ExerciseDetailResponse toDto(Exercise exercise, List<ExerciseBodyPart> exerciseBodyPartList, Boolean isLiked) {
+        List<String> bodyPartNames = exerciseBodyPartList.stream().map(exerciseBodyPart -> exerciseBodyPart.getBodyPart().getBodyPartType().name()).collect(Collectors.toList());
 
         return new ExerciseDetailResponse(
                 exercise.getThumbnail(),

@@ -8,6 +8,7 @@ import com.soma.domain.exercise.dto.response.ExerciseDetailResponse;
 import com.soma.domain.exercise.dto.response.ExerciseResponse;
 import com.soma.domain.exercise.entity.Exercise;
 import com.soma.domain.exercise.repository.ExerciseRepository;
+import com.soma.domain.exercise_bodypart.entity.ExerciseBodyPart;
 import com.soma.domain.exercise_bodypart.repository.ExerciseBodypartRepository;
 import com.soma.domain.exercise_like.repository.ExerciseLikeRepository;
 import com.soma.domain.exercise_record.repository.ExerciseRecordRepository;
@@ -49,13 +50,13 @@ public class ExerciseService {
     public ExerciseDetailResponse readExerciseDetails(Long exerciseId, String email) {
         Boolean isLiked = false;
         Exercise exercise = exerciseRepository.findByIdAndStatus(exerciseId, ACTIVE).orElseThrow(ExerciseNotFoundException::new);
-        List<BodyPart> bodyPartList = exerciseBodypartRepository.findAllByExerciseIdAndStatus(exerciseId, ACTIVE);
+        List<ExerciseBodyPart> exerciseBodyPartList = exerciseBodypartRepository.findAllByExerciseIdAndStatus(exerciseId, ACTIVE);
 
         if (email != null) {
             Member member = memberRepository.findByEmailAndStatus(email, ACTIVE).orElseThrow(MemberNotFoundException::new);
             isLiked = exerciseLikeRepository.existsByMemberAndExercise(member, exercise);
         }
 
-        return ExerciseDetailResponse.toDto(exercise, bodyPartList, isLiked);
+        return ExerciseDetailResponse.toDto(exercise, exerciseBodyPartList, isLiked);
     }
 }
