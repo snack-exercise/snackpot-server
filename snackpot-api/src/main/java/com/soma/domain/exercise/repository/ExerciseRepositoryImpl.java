@@ -29,41 +29,48 @@ public class ExerciseRepositoryImpl implements ExerciseRepositoryCustom {
     private final JPAQueryFactory jpaQueryFactory;
     @Override
     public Slice<ExerciseResponse> findAllByCondition(ExerciseReadCondition exerciseReadCondition, int size, String email) {
+
+        BooleanExpression isLikedExpression = email != null ?
+                JPAExpressions
+                        .selectOne()
+                        .from(exerciseLike)
+                        .where(exerciseLike.exercise.id.eq(exercise.id)
+                                .and(exerciseLike.member.email.eq(email)))
+                        .exists() :
+                JPAExpressions.selectZero().eq(1);
+
         JPAQuery<ExerciseResponse> query = jpaQueryFactory
-                .select(Projections.fields(ExerciseResponse.class,
+                .select(Projections.constructor(ExerciseResponse.class,
                         exercise.id.as("exerciseId"),
                         exercise.thumbnail,
                         exercise.title,
                         youtuber.name.as("youtuberName"),
                         exercise.timeSpent,
-//                        JPAExpressions
-//                                .select(bodyPart.bodyPartType)
-//                                .from(bodyPart)
-//                                .innerJoin(exerciseBodyPart).on(bodyPart.id.eq(exerciseBodyPart.bodyPart.id))
-//                                .where(exerciseBodyPart.exercise.id.eq(exercise.id)),
-                        JPAExpressions
-                                .select(exerciseBodyPart.bodyPart.bodyPartType)
-                                .from(exerciseBodyPart)
-                                .innerJoin(exercise).on(exerciseBodyPart.exercise.id.eq(exercise.id)),
                         exercise.calories,
-                        exercise.level
+                        exercise.level,
+                        isLikedExpression
                 ))
                 .from(exercise)
                 .leftJoin(youtuber).on(exercise.youtuber.id.eq(youtuber.id))
                 .leftJoin(exerciseBodyPart).on(exercise.id.eq(exerciseBodyPart.exercise.id));
 
-        if (email != null) {
-            query.leftJoin(exerciseLike).on(exercise.id.eq(exerciseLike.exercise.id));
-        }
-
         List<ExerciseResponse> results = query.where(eqBodyPartTypes(exerciseReadCondition.getBodyPartTypes()))
                 .where(eqLevel(exerciseReadCondition.getLevel()))
                 .where(eqLike(exerciseReadCondition.getLike(), email))
                 .where(leTimeSpent(exerciseReadCondition.getTimeSpent()))
-                .where(exercise.id.loe(exerciseReadCondition.getCursorId()))
+                .where(loeCursorId(exerciseReadCondition.getCursorId()))
                 .orderBy(exercise.id.desc())
                 .limit(size + 1)
                 .fetch();
+
+        for (ExerciseResponse er : results) {
+            List<BodyPartType> bodyPartTypes = jpaQueryFactory
+                    .select(exerciseBodyPart.bodyPart.bodyPartType)
+                    .from(exerciseBodyPart)
+                    .where(exerciseBodyPart.exercise.id.eq(er.getExerciseId())).fetch();
+
+            er.updateBodyPartTypes(bodyPartTypes);
+        }
 
         boolean hasNext = results.size() > size;
         if (hasNext) {
@@ -101,6 +108,13 @@ public class ExerciseRepositoryImpl implements ExerciseRepositoryCustom {
     private BooleanExpression leTimeSpent(Integer timeSpent) {
         if (timeSpent != null) {
             return exercise.timeSpent.loe(timeSpent);
+        }
+        return null;
+    }
+
+    private BooleanExpression loeCursorId(Long cursorId) {
+        if (cursorId != null) {
+            return exercise.id.loe(cursorId);
         }
         return null;
     }
