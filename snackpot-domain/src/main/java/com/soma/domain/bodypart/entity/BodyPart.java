@@ -3,6 +3,7 @@ package com.soma.domain.bodypart.entity;
 import com.soma.common.BaseEntity;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -16,4 +17,9 @@ public class BodyPart extends BaseEntity {
 
     @Enumerated(EnumType.STRING)
     private BodyPartType bodyPartType;
+
+    @Builder
+    public BodyPart(BodyPartType bodyPartType) {
+        this.bodyPartType = bodyPartType;
+    }
 }
