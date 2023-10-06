@@ -12,4 +12,12 @@ public class YoutuberFactory {
                 .name(이름)
                 .profileImg(프로필사진).build();
     }
+
+    public static Youtuber createYoutuberWithChannelId(String channelId) {
+        return Youtuber.builder()
+                .channelId(channelId)
+                .description(설명)
+                .name(이름)
+                .profileImg(프로필사진).build();
+    }
 }
