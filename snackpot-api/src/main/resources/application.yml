@@ -39,6 +39,10 @@ spring:
       hibernate:
         format_sql: true
 
+  jackson:
+    serialization:
+      indent_output: true
+
   sql:
     init:
       mode: never
