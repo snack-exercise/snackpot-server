@@ -1,6 +1,7 @@
 package com.soma.domain.exercise.service;
 
 import com.soma.domain.bodypart.entity.BodyPart;
+import com.soma.domain.bodypart.entity.BodyPartType;
 import com.soma.domain.exercise.dto.request.ExerciseFinishRequest;
 import com.soma.domain.exercise.dto.request.ExerciseReadCondition;
 import com.soma.domain.exercise.dto.response.ExerciseDetailResponse;
@@ -34,8 +35,8 @@ public class ExerciseService {
 
     private final ExerciseLikeRepository exerciseLikeRepository;
 
-    public Slice<ExerciseResponse> readAllByCondition(ExerciseReadCondition condition, int size, String email) {
-        return exerciseRepository.findAllByCondition(condition, size, email);
+    public Slice<ExerciseResponse> readAllByCondition(ExerciseReadCondition condition, List<BodyPartType> bodyPartTypes, int size, String email) {
+        return exerciseRepository.findAllByCondition(condition, bodyPartTypes, size, email);
     }
 
     @Transactional
