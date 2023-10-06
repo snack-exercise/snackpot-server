@@ -47,10 +47,15 @@ public class ExerciseService {
     }
 
     public ExerciseDetailResponse readExerciseDetails(Long exerciseId, String email) {
+        Boolean isLiked = false;
         Exercise exercise = exerciseRepository.findByIdAndStatus(exerciseId, ACTIVE).orElseThrow(ExerciseNotFoundException::new);
         List<BodyPart> bodyPartList = exerciseBodypartRepository.findAllByExerciseIdAndStatus(exerciseId, ACTIVE);
-        Member member = memberRepository.findByEmailAndStatus(email, ACTIVE).orElseThrow(MemberNotFoundException::new);
-        Boolean isLiked = exerciseLikeRepository.existsByMemberAndExercise(member, exercise);
+
+        if (email != null) {
+            Member member = memberRepository.findByEmailAndStatus(email, ACTIVE).orElseThrow(MemberNotFoundException::new);
+            isLiked = exerciseLikeRepository.existsByMemberAndExercise(member, exercise);
+        }
+
         return ExerciseDetailResponse.toDto(exercise, bodyPartList, isLiked);
     }
 }
