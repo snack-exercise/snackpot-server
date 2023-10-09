@@ -16,6 +16,7 @@ public class ExerciseFactory {
                 .title(제목)
                 .thumbnail(썸네일)
                 .timeSpent(영상길이)
+                .exerciseType(운동종류)
                 .build();
     }
 
@@ -29,6 +30,7 @@ public class ExerciseFactory {
                 .title(제목)
                 .thumbnail(썸네일)
                 .timeSpent(영상길이)
+                .exerciseType(운동종류)
                 .build();
     }
 }

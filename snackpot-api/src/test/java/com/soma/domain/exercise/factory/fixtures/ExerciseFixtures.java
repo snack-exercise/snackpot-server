@@ -1,5 +1,6 @@
 package com.soma.domain.exercise.factory.fixtures;
 
+import com.soma.domain.exercise.entity.ExerciseType;
 import com.soma.domain.exercise.entity.Level;
 
 public class ExerciseFixtures {
@@ -16,4 +17,6 @@ public class ExerciseFixtures {
     public static String 썸네일 = "thumbnail";
 
     public static Integer 영상길이 = 60;
+
+    public static ExerciseType 운동종류 = ExerciseType.CARDIO;
 }

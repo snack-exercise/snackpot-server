@@ -35,8 +35,11 @@ public class Exercise extends BaseEntity {
 
     private Integer timeSpent;
 
+    @Enumerated(EnumType.STRING)
+    private ExerciseType exerciseType;
+
     @Builder
-    public Exercise(Youtuber youtuber, String videoId, Integer calories, Level level, String effect, String title, String thumbnail, Integer timeSpent) {
+    public Exercise(Youtuber youtuber, String videoId, Integer calories, Level level, String effect, String title, String thumbnail, Integer timeSpent, ExerciseType exerciseType) {
         this.youtuber = youtuber;
         this.videoId = videoId;
         this.calories = calories;
@@ -45,6 +48,7 @@ public class Exercise extends BaseEntity {
         this.title = title;
         this.thumbnail = thumbnail;
         this.timeSpent = timeSpent;
+        this.exerciseType = exerciseType;
         active();
     }
 
