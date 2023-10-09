@@ -1,6 +1,7 @@
 package com.soma.domain.exercise.dto.response;
 
 import com.soma.domain.bodypart.entity.BodyPartType;
+import com.soma.domain.exercise.entity.ExerciseType;
 import com.soma.domain.exercise.entity.Level;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -22,8 +23,9 @@ public class ExerciseResponse {
     private Level level;
     private Integer calories;
     private Boolean isLiked;
+    private ExerciseType exerciseType;
 
-    public ExerciseResponse(Long exerciseId, String thumbnail, String title, String youtuberName, Integer timeSpent, Integer calories, Level level, Boolean isLiked) {
+    public ExerciseResponse(Long exerciseId, String thumbnail, String title, String youtuberName, Integer timeSpent, Integer calories, Level level, Boolean isLiked, ExerciseType exerciseType) {
         this.exerciseId = exerciseId;
         this.thumbnail = thumbnail;
         this.title = title;
@@ -32,6 +34,7 @@ public class ExerciseResponse {
         this.calories = calories;
         this.level = level;
         this.isLiked = isLiked;
+        this.exerciseType = exerciseType;
     }
 
     public void updateBodyPartTypes(List<BodyPartType> bodyPartTypes) {
