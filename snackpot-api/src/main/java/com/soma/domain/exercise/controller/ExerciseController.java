@@ -56,7 +56,7 @@ public class ExerciseController {
 
 
     @Operation(summary = "운동 상세 조회", description = "주어진 운동 id로 운동을 조회합니다.", security = { @SecurityRequirement(name = "Authorization") })
-    @Parameter(name = "exerciseId", description = "조회할 운동 id 입니다.", required = true,  in = ParameterIn.QUERY)
+    @Parameter(name = "exerciseId", description = "조회할 운동 id 입니다.", required = true,  in = ParameterIn.PATH)
     @GetMapping("/{exerciseId}")
     @ResponseStatus(HttpStatus.OK)
     public Response readExerciseDetails(@PathVariable Long exerciseId, @AuthenticationPrincipal UserDetails loginUser) {
