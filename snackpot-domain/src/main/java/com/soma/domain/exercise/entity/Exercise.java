@@ -18,6 +18,7 @@ public class Exercise extends BaseEntity {
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "youtuberId")
     private Youtuber youtuber;
 
     private String videoId;

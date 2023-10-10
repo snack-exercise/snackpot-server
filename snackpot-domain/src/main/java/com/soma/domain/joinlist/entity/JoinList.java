@@ -20,9 +20,11 @@ public class JoinList extends BaseEntity {
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "memberId")
     private Member member;
 
     @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "groupId")
     private Group group;
 
     @Enumerated(EnumType.STRING)

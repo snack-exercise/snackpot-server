@@ -16,9 +16,11 @@ public class Rating extends BaseEntity {
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "memberId")
     private Member member;
 
     @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "exerciseId")
     private Exercise exercise;
 
     @Enumerated(EnumType.STRING)
