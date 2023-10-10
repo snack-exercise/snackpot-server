@@ -2,6 +2,7 @@ package com.soma.advice;
 
 import com.soma.exception.group.AlreadyJoinedGroupException;
 import com.soma.exception.group.GroupNotFoundException;
+import com.soma.exception.member.MemberNicknameAlreadyExistsException;
 import com.soma.exception.member.MemberNotFoundException;
 import com.soma.util.response.Response;
 import lombok.Getter;
@@ -39,5 +40,12 @@ public class ExceptionAdvice {
         return Response.failure(ALREADY_JOINED_GROUP_EXCEPTION);
     }
 
+    /* Auth */
+    @ExceptionHandler(MemberNicknameAlreadyExistsException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public Response memberNicknameAlreadyExistsExceptionHandler(MemberNicknameAlreadyExistsException e){
+//        Sentry.captureException(e);
+        return Response.failure(MEMBER_ALREADY_EXIST);
+    }
 
 }
