@@ -9,6 +9,8 @@ import com.soma.domain.exercise.factory.entity.ExerciseFactory;
 import com.soma.domain.exercise.repository.ExerciseRepository;
 import com.soma.domain.exercise_body_part.factory.entity.ExerciseBodyPartFactory;
 import com.soma.domain.exercise_bodypart.repository.ExerciseBodypartRepository;
+import com.soma.domain.exercise_like.factory.entity.ExerciseLikeFactory;
+import com.soma.domain.exercise_like.repository.ExerciseLikeRepository;
 import com.soma.domain.member.entity.Member;
 import com.soma.domain.member.factory.entity.MemberFactory;
 import com.soma.domain.member.repository.MemberRepository;
@@ -54,6 +56,8 @@ class ExerciseControllerIntegrationTest {
     @Autowired private MemberRepository memberRepository;
     @Autowired private ExerciseRepository exerciseRepository;
     @Autowired private YoutuberRepository youtuberRepository;
+
+    @Autowired private ExerciseLikeRepository exerciseLikeRepository;
 
     @Autowired
     private BodyPartRepository bodyPartRepository;
@@ -155,7 +159,42 @@ class ExerciseControllerIntegrationTest {
                 .andDo(print());
     }
 
+    @Test
+    @DisplayName("운동 목록 리스트 좋아요 여부를 테스트한다.")
+    @WithMockUser(username = "test@naver.com")
+    void readAllByConditionAsIsLikedTest() throws Exception {
+        //given
+        Youtuber 유튜버1 = YoutuberFactory.createYoutuberWithChannelId("1");
+        Youtuber 유튜버2 = YoutuberFactory.createYoutuberWithChannelId("2");
+        youtuberRepository.save(유튜버1);
+        youtuberRepository.save(유튜버2);
 
+        Exercise 운동1 = exerciseRepository.save(ExerciseFactory.createExerciseWithYoutuberAndVideoId(유튜버1, "1"));
+        Exercise 운동2 = exerciseRepository.save(ExerciseFactory.createExerciseWithYoutuberAndVideoId(유튜버2, "2"));
+
+
+        exerciseBodypartRepository.save(ExerciseBodyPartFactory.createExerciseBodyPart(운동1, 상체));
+        exerciseBodypartRepository.save(ExerciseBodyPartFactory.createExerciseBodyPart(운동1, 코어));
+        exerciseBodypartRepository.save(ExerciseBodyPartFactory.createExerciseBodyPart(운동1, 다리));
+
+        exerciseBodypartRepository.save(ExerciseBodyPartFactory.createExerciseBodyPart(운동2, 하체));
+        exerciseBodypartRepository.save(ExerciseBodyPartFactory.createExerciseBodyPart(운동2, 코어));
+
+        exerciseLikeRepository.save(ExerciseLikeFactory.createExerciseLike(회원, 운동1));
+        //exerciseLikeRepository.save(ExerciseLikeFactory.createExerciseLike(회원, 운동2));
+
+        clean();
+
+        //when, then
+        mockMvc.perform(
+                        get("/exercises")
+                                .param("size", "5")
+                                .param("like", "true")
+                ).andExpect(status().isOk())
+                .andExpect(jsonPath("$.success").value("true"))
+                .andExpect(jsonPath("$.code").value("0"))
+                .andDo(print());
+    }
 
     void clean() {
         em.flush();
