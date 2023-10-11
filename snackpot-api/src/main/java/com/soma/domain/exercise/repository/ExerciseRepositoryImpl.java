@@ -54,7 +54,8 @@ public class ExerciseRepositoryImpl implements ExerciseRepositoryCustom {
                         exercise.timeSpent,
                         exercise.calories,
                         exercise.level,
-                        isLikedExpression
+                        isLikedExpression,
+                        exercise.exerciseType
                 ))
                 .from(exercise)
                 .leftJoin(youtuber).on(exercise.youtuber.id.eq(youtuber.id));
