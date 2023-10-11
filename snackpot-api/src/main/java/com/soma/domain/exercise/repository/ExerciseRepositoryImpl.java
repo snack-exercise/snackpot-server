@@ -39,6 +39,12 @@ public class ExerciseRepositoryImpl implements ExerciseRepositoryCustom {
                         .exists() :
                 JPAExpressions.selectZero().eq(1);
 
+        BooleanBuilder isLikedWhereBuilder = new BooleanBuilder();
+
+        if (email != null) {
+            isLikedWhereBuilder.and(isLikedExpression);
+        }
+
         JPAQuery<ExerciseResponse> query = jpaQueryFactory
                 .select(Projections.constructor(ExerciseResponse.class,
                         exercise.id.as("exerciseId"),
@@ -55,7 +61,7 @@ public class ExerciseRepositoryImpl implements ExerciseRepositoryCustom {
 
         List<ExerciseResponse> results = query.where(eqBodyPartTypes(bodyPartTypes))
                 .where(eqLevel(exerciseReadCondition.getLevel()))
-                .where(eqLike(exerciseReadCondition.getLike(), email))
+                .where(isLikedWhereBuilder)
                 .where(leTimeSpent(exerciseReadCondition.getTimeSpent()))
                 .where(loeCursorId(exerciseReadCondition.getCursorId()))
                 .orderBy(exercise.id.desc())
