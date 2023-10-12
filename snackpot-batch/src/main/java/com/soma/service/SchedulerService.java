@@ -21,12 +21,9 @@ public class SchedulerService {
     @Value("${youtube.api-key}")
     private String apiKey;
 
-
     @Scheduled(cron = "0 0 2 * * ?")
     public void updateExerciseInfo() {
 
-
-        // Update Exercise info from external API or any other source
         for(Exercise exercise : exerciseRepository.findAll()) {
             try {
                 YouTube.Videos.List request = youTube.videos().list("snippet, contentDetails");
@@ -45,7 +42,6 @@ public class SchedulerService {
             } catch (IOException e) {
                 e.printStackTrace();
             }
-
         }
     }
 }

@@ -12,6 +12,7 @@ import org.springframework.batch.core.step.builder.StepBuilder;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.core.task.SimpleAsyncTaskExecutor;
 import org.springframework.transaction.PlatformTransactionManager;
 
 @Configuration
@@ -32,11 +33,12 @@ public class ExerciseUpdateJobConfig extends DefaultBatchConfiguration {
 
     @Bean
     public Step exerciseUpdateStep(JobRepository jobRepository, PlatformTransactionManager platformTransactionManager) {
-        int chunkSize = 10;
+        int chunkSize = 100;
         return new StepBuilder("exerciseUpdateStep", jobRepository)
                 .chunk(chunkSize, platformTransactionManager)
                 .reader(exerciseUpdateItemReader)
                 .writer(exerciseUpdateItemWriter)
+                .taskExecutor(new SimpleAsyncTaskExecutor()) // 멀티 스레드로 병렬 처리
                 .transactionManager(platformTransactionManager)
                 .build();
     }
