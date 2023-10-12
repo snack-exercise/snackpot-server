@@ -38,7 +38,6 @@ public class ExerciseController {
             @RequestParam(defaultValue = "5", value = "size") int size,
             @AuthenticationPrincipal UserDetails loginUser
     ) {
-        System.out.println(bodyPartTypes);
         if (loginUser != null) {
             return Response.success(exerciseService.readAllByCondition(condition, bodyPartTypes, size, loginUser.getUsername()));
         }else{

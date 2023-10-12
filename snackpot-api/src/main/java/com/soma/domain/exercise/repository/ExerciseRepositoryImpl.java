@@ -41,7 +41,7 @@ public class ExerciseRepositoryImpl implements ExerciseRepositoryCustom {
 
         BooleanBuilder isLikedWhereBuilder = new BooleanBuilder();
 
-        if (email != null) {
+        if (email != null && exerciseReadCondition.getLike() != null) {
             isLikedWhereBuilder.and(isLikedExpression);
         }
 
