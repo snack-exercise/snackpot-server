@@ -57,7 +57,7 @@ jobs:
       ## (3-5) application-sentry.yml 생성
       - name: make application-sentry.yml
         run: |
-          cd ./src/main/resources
+          cd ./snackpot-api/src/main/resources
           touch ./application-sentry.yml
           echo "${{ secrets.APPLICATION_SENTRY_YML }}" > ./application-sentry.yml
         shell: bash
