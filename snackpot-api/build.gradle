@@ -29,6 +29,10 @@ dependencies {
     implementation 'com.google.firebase:firebase-admin:9.1.1'
     // snackpot-domain 모듈
     implementation project(':snackpot-domain')
+    // sentry - spring boot
+    implementation 'io.sentry:sentry-spring-boot-starter-jakarta:6.27.0'
+    // sentry - logback
+    implementation 'io.sentry:sentry-logback:6.25.2'
 }
 
 test {
