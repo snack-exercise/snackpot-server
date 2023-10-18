@@ -79,8 +79,8 @@ class MemberControllerIntegrationTest {
     @DisplayName("총 사용자 수를 조회한다.")
     void getTotalNumTest() throws Exception {
         // given
-        memberRepository.save(MemberFactory.createUserRoleMember());
-        memberRepository.save(MemberFactory.createUserRoleMember());
+        memberRepository.save(MemberFactory.createUserRoleMemberWithNameAndEmail("회원A", "A@gamil.com"));
+        memberRepository.save(MemberFactory.createUserRoleMemberWithNameAndEmail("회원B", "B@gamil.com"));
 
         // when, then
         Long totalNum = memberRepository.countByStatus(Status.ACTIVE);
