@@ -9,6 +9,7 @@ import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.enums.ParameterIn;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -27,14 +28,14 @@ public class GroupController {
     @Operation(summary = "운동 그룹 생성", description = "하나의 운동 그룹을 생성합니다.", security = { @SecurityRequirement(name = "Authorization") })
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping()
-    public Response create(@RequestBody GroupCreateRequest request, @AuthenticationPrincipal UserDetails loginUser){
+    public Response create(@Valid @RequestBody GroupCreateRequest request, @AuthenticationPrincipal UserDetails loginUser){
         return Response.success(groupService.create(request, loginUser.getUsername()));
     }
 
     @Operation(summary = "그룹 가입", description = "코드로 그룹을 가입합니다.", security = { @SecurityRequirement(name = "Authorization") })
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping("/join")
-    public Response join(@RequestBody GroupJoinRequest request, @AuthenticationPrincipal UserDetails loginUser){
+    public Response join(@Valid @RequestBody GroupJoinRequest request, @AuthenticationPrincipal UserDetails loginUser){
         return Response.success(groupService.join(request, loginUser.getUsername()));
     }
 
