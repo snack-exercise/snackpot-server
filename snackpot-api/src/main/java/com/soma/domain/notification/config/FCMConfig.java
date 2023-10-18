@@ -39,7 +39,11 @@ public class FCMConfig {
                 .setProjectId(projectId) // 필수는 아님
                 .build();
 
-        return FirebaseApp.initializeApp(options);
+        if(FirebaseApp.getApps().size() != 0){
+            return FirebaseApp.getApps().get(0);
+        }else{
+            return FirebaseApp.initializeApp(options);
+        }
     }
 
     @Bean
