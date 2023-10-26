@@ -3,6 +3,7 @@ package com.soma.advice;
 import com.soma.exception.exercise.ExerciseNotFoundException;
 import com.soma.exception.group.AlreadyJoinedGroupException;
 import com.soma.exception.group.GroupNotFoundException;
+import com.soma.exception.member.FCMTokenNotFoundException;
 import com.soma.exception.member.MemberNicknameAlreadyExistsException;
 import com.soma.exception.member.MemberNotFoundException;
 import com.soma.util.response.Response;
@@ -55,4 +56,11 @@ public class ExceptionAdvice {
         return Response.failure(EXERCISE_NOT_FOUND_EXCEPTION);
     }
 
+    /* Notification */
+    @ExceptionHandler(FCMTokenNotFoundException.class)
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    public Response fcmTokenNotFoundExceptionHandler(FCMTokenNotFoundException e){
+        log.error(FCM_TOKEN_NOT_FOUND_EXCEPTION.getMessage());
+        return Response.failure(FCM_TOKEN_NOT_FOUND_EXCEPTION);
+    }
 }

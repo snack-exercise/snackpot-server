@@ -56,7 +56,7 @@ class AuthServiceTest {
         for(int i=0; i<threadCount; i++){
             executorService.submit(()->{
                 try{
-                    authService.signup(new SignUpRequest("테스트", 10, "fcmToken")); //문제의 메서드 호출
+                    authService.signup(new SignUpRequest("테스트", 10)); //문제의 메서드 호출
                 } finally {
                     latch.countDown(); //완료되었음을 알림
                 }

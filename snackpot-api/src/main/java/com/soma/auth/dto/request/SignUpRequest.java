@@ -19,7 +19,4 @@ public class SignUpRequest {
     @NotNull(message = "일일 목표 시간은 필수입니다.")
     @Min(value = 0, message = "일일 목표 시간은 0초 이상이어야 합니다.")
     private Integer dailyGoalTime;
-
-    @NotBlank(message = "fcm 토큰은 필수 값입니다.")
-    private String fcmToken;
 }
