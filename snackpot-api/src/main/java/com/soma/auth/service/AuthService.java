@@ -38,8 +38,6 @@ public class AuthService {
                 .dailyGoalTime(request.getDailyGoalTime())
                 .roleType(RoleType.USER)
                 .build();
-        // fcm 토큰 저장
-        member.updateFcmToken(request.getFcmToken());
 
         memberRepository.save(member);
 
@@ -53,9 +51,6 @@ public class AuthService {
         Member member = memberRepository.findByNameAndStatus(request.getName(), Status.ACTIVE).orElseThrow(MemberNotFoundException::new);
 
         String accessToken = jwtService.createAccessToken(member.getEmail());
-
-        // fcm 토큰 저장
-        member.updateFcmToken(request.getFcmToken());
 
         return new SignInResponse("Bearer " + accessToken, member.getId());
     }
