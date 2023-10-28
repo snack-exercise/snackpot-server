@@ -14,7 +14,7 @@ spring:
     include:
       - jwt
       - fcm
-      - sentry
+      - logging
 
 ---
 spring:
