@@ -64,6 +64,15 @@ jobs:
           echo "${{ secrets.APPLICATION_SENTRY_YML }}" > ./application-sentry.yml
         shell: bash
 
+
+      ## (3-6) application-logging.yml 생성
+      - name: make application-logging.yml
+        run: |
+          cd ./snackpot-api/src/main/resources
+          touch ./application-logging.yml
+          echo "${{ secrets.APPLICATION_LOGGING_YML }}" > ./application-logging.yml
+        shell: bash
+
       ## (3-6) snackpot-fcm.json 생성
       - name: make snackpot-fcm.json
         run: echo "${{ secrets.FCM_JSON_SECRET }}" | base64 --decode > ./snackpot-api/src/main/resources/snackpot-fcm.json
