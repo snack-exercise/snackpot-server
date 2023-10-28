@@ -44,6 +44,7 @@ application-jwt.yml
 application-fcm.yml
 application-sentry.yml
 application-youtube.yml
+application-logging.yml
 
 ### Firebase Cloud Messaging ###
 snackpot-fcm.json
