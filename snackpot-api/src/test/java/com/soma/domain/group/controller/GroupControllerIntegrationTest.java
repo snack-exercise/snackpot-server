@@ -339,7 +339,7 @@ public class GroupControllerIntegrationTest {
         Group 그룹 = GroupFactory.createGroup();
         groupRepository.save(그룹);
 
-        Member 회원A = MemberFactory.createUserRoleMemberWithNameAndEmailAndDailyGoalTime("회원A", "A@gmail.com", 10);
+        Member 회원A = MemberFactory.createUserRoleMemberWithNameAndEmailAndDailyGoalTime("회원A", "A@gmail.com", 10); // 분 단위
         Member 회원B = MemberFactory.createUserRoleMemberWithNameAndEmailAndDailyGoalTime("회원B", "B@gmail.com", 20);
         memberRepository.saveAll(List.of(회원A, 회원B));
 
@@ -356,11 +356,11 @@ public class GroupControllerIntegrationTest {
         LocalDateTime 수 = localDateTimeOfThisWeek(3);
         LocalDateTime 일 = localDateTimeOfThisWeek(7);
 
-        ExerciseRecord 기록A = ExerciseRecordFactory.createExerciseRecordWithExerciseAndMemberAndTime(운동, 회원A, 9);
-        ExerciseRecord 기록B = ExerciseRecordFactory.createExerciseRecordWithExerciseAndMemberAndTime(운동, 회원A, 11);
-        ExerciseRecord 기록C = ExerciseRecordFactory.createExerciseRecordWithExerciseAndMemberAndTime(운동, 회원B, 19);
-        ExerciseRecord 기록D = ExerciseRecordFactory.createExerciseRecordWithExerciseAndMemberAndTime(운동, 회원B, 21);
-        ExerciseRecord 기록E = ExerciseRecordFactory.createExerciseRecordWithExerciseAndMemberAndTime(운동, 회원B, 25);
+        ExerciseRecord 기록A = ExerciseRecordFactory.createExerciseRecordWithExerciseAndMemberAndTime(운동, 회원A, 10*60-1);// 초 단위
+        ExerciseRecord 기록B = ExerciseRecordFactory.createExerciseRecordWithExerciseAndMemberAndTime(운동, 회원A, 10*60);
+        ExerciseRecord 기록C = ExerciseRecordFactory.createExerciseRecordWithExerciseAndMemberAndTime(운동, 회원B, 20*60-1);
+        ExerciseRecord 기록D = ExerciseRecordFactory.createExerciseRecordWithExerciseAndMemberAndTime(운동, 회원B, 20*60);
+        ExerciseRecord 기록E = ExerciseRecordFactory.createExerciseRecordWithExerciseAndMemberAndTime(운동, 회원B, 20*60+1);
         exerciseRecordRepository.saveAll(List.of(기록A, 기록B, 기록C, 기록D, 기록E));
         기록A.updateCreatedAt(월);
         기록B.updateCreatedAt(수);
