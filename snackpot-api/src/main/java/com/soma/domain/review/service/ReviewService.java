@@ -43,7 +43,8 @@ public class ReviewService {
                     .build());
         }
 
-        if(request.getReviewContent() != null){
+        System.out.println("리뷰 비어있나 = " + !request.getReviewContent().isBlank());
+        if(request.getReviewContent() != null && !request.getReviewContent().isBlank()){
             reviewRepository.save(Review.builder()
                     .content(request.getReviewContent())
                     .exercise(exercise)

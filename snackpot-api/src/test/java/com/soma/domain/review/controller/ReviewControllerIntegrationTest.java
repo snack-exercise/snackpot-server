@@ -110,6 +110,37 @@ class ReviewControllerIntegrationTest {
     }
 
     @Test
+    @DisplayName("공백이나 빈 문자열의 리뷰는 작성할 수 없다.")
+    @WithMockUser(username = "test@naver.com")
+    void createBlankReviewTest() throws Exception {
+        //given
+        Youtuber 유튜버 = YoutuberFactory.createYoutuber();
+        youtuberRepository.save(유튜버);
+
+        Exercise 운동 = ExerciseFactory.createExerciseWithYoutuber(유튜버);
+        exerciseRepository.save(운동);
+
+        ReviewCreateRequest request = ReviewCreateFactory.createReviewCreateRequest(운동.getId(), RatingType.GOOD, "   ");
+        int beforeReviewSize = reviewRepository.findAll().size();
+        int beforeRatingSize = ratingRepository.findAll().size();
+
+        //when //then
+        mockMvc.perform(
+                        post("/reviews")
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .content(objectMapper.writeValueAsString(request))
+                ).andExpect(status().isCreated())
+                .andExpect(jsonPath("$.success").value("true"))
+                .andExpect(jsonPath("$.code").value("0"))
+                .andDo(print());
+
+        int afterReviewSize = reviewRepository.findAll().size();
+        int afterRatingSize = ratingRepository.findAll().size();
+        assertThat(afterReviewSize).isEqualTo(beforeReviewSize);
+        assertThat(afterRatingSize).isEqualTo(beforeRatingSize + 1);
+    }
+
+    @Test
     @DisplayName("첫번째 리뷰 목록을 받아온다.")
     @WithMockUser(username = "test@naver.com")
     void readFirstReviewListTest() throws Exception {
