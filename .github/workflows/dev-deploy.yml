@@ -56,16 +56,23 @@ jobs:
           echo "${{ secrets.APPLICATION_FCM_YML }}" > ./application-fcm.yml
         shell: bash
 
-      ## (3-5) application-sentry.yml 생성
-      - name: make application-sentry.yml
+      ## (3-5) application-prometheus.yml 생성
+      - name: make application-prometheus.yml
         run: |
           cd ./snackpot-api/src/main/resources
-          touch ./application-sentry.yml
-          echo "${{ secrets.APPLICATION_SENTRY_YML }}" > ./application-sentry.yml
+          touch ./application-prometheus.yml
+          echo "${{ secrets.APPLICATION_PROMETHEUS_YML }}" > ./application-prometheus.yml
         shell: bash
 
+      ## (3-6) prometheus.yml 생성
+      - name: make prometheus.yml
+        run: |
+          cd ./snackpot-api/src/main/resources
+          touch ./prometheus.yml
+          echo "${{ secrets.PROMETHEUS_YML }}" > ./prometheus.yml
+        shell: bash
 
-      ## (3-6) application-logging.yml 생성
+      ## (3-7) application-logging.yml 생성
       - name: make application-logging.yml
         run: |
           cd ./snackpot-api/src/main/resources
@@ -73,7 +80,7 @@ jobs:
           echo "${{ secrets.APPLICATION_LOGGING_YML }}" > ./application-logging.yml
         shell: bash
 
-      ## (3-6) snackpot-fcm.json 생성
+      ## (3-8) snackpot-fcm.json 생성
       - name: make snackpot-fcm.json
         run: echo "${{ secrets.FCM_JSON_SECRET }}" | base64 --decode > ./snackpot-api/src/main/resources/snackpot-fcm.json
         shell: bash
