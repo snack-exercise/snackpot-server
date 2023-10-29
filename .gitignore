@@ -45,6 +45,8 @@ application-fcm.yml
 application-sentry.yml
 application-youtube.yml
 application-logging.yml
+application-prometheus.yml
+prometheus.yml
 
 ### Firebase Cloud Messaging ###
 snackpot-fcm.json
