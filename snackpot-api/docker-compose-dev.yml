@@ -49,6 +49,7 @@ services:
       - '--config.file=/etc/prometheus/prometheus.yml'
     networks:
       - snackpot_net
+    restart: always
 
   grafana:
     image: grafana/grafana
@@ -59,6 +60,7 @@ services:
       - prometheus
     networks:
       - snackpot_net
+    restart: always
 
 networks:
   snackpot_net:
