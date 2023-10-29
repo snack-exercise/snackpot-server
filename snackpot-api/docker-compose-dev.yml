@@ -44,7 +44,7 @@ services:
     depends_on:
       - application
     volumes:
-      - src/main/resources/prometheus.yml:/etc/prometheus/prometheus.yml
+      - ./src/main/resources/prometheus.yml:/etc/prometheus/prometheus.yml
     command:
       - '--config.file=/etc/prometheus/prometheus.yml'
     networks:
