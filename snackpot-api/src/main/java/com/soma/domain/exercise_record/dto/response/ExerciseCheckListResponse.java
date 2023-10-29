@@ -36,7 +36,7 @@ public class ExerciseCheckListResponse {
         int idx = localDate.getDayOfWeek().getValue()-1;
         if(userTimeStaticsResponse.getTime() == 0) {
             checkList.set(idx, UNCHECK);
-        }else if(member.getDailyGoalTime() > userTimeStaticsResponse.getTime()){
+        }else if(member.getDailyGoalTime()*60 > userTimeStaticsResponse.getTime()){ // DailyGoailTime은 분 단위, userTimeStaticResponse의 time은 초단위
             checkList.set(idx, PARTIAL);
         }else {
             checkList.set(idx, CHECK);
