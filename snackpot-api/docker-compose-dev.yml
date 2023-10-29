@@ -36,6 +36,30 @@ services:
     networks:
       - snackpot_net
 
+  prometheus:
+    image: prom/prometheus
+    container_name: snackpot_prometheus
+    ports:
+      - 9090:9090
+    depends_on:
+      - application
+    volumes:
+      - src/main/resources/prometheus.yml:/etc/prometheus/prometheus.yml
+    command:
+      - '--config.file=/etc/prometheus/prometheus.yml'
+    networks:
+      - snackpot_net
+
+  grafana:
+    image: grafana/grafana
+    container_name: snackpot_grafana
+    ports:
+      - 3000:3000
+    depends_on:
+      - prometheus
+    networks:
+      - snackpot_net
+
 networks:
   snackpot_net:
     driver: bridge
