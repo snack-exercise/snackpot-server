@@ -1,7 +1,7 @@
 version: "3"
 services:
   database:
-    container_name: snackpot-db-container
+    container_name: snackpot_db_container
     image: mariadb
     volumes: # [로컬 디렉토리]:[도커 컨테이너 내부 디렉토리] 매핑
 #      - ~/docker-volume/mariadb/conf.d:/etc/mysql/conf.d
