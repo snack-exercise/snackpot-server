@@ -1,7 +1,7 @@
 version: "3"
 services:
   database:
-    container_name: snackpot_db_container
+    container_name: snackpot-db-container
     image: mariadb
     volumes: # [로컬 디렉토리]:[도커 컨테이너 내부 디렉토리] 매핑
 #      - ~/docker-volume/mariadb/conf.d:/etc/mysql/conf.d
@@ -23,7 +23,7 @@ services:
 
   application:
     image: mingsound/snackpot:latest-dev
-    container_name: snackpot_spring_container
+    container_name: snackpot-spring-container
     environment:
 #      SPRING_DATASOURCE_URL: jdbc:mariadb://database:3306/snackpot_db?useUnicode=true
 #      SPRING_DATASOURCE_USERNAME: root
@@ -38,7 +38,7 @@ services:
 
   prometheus:
     image: prom/prometheus
-    container_name: snackpot_prometheus
+    container_name: snackpot-prometheus
     ports:
       - 9090:9090
     depends_on:
@@ -53,7 +53,7 @@ services:
 
   grafana:
     image: grafana/grafana
-    container_name: snackpot_grafana
+    container_name: snackpot-grafana
     ports:
       - 3000:3000
     depends_on:
