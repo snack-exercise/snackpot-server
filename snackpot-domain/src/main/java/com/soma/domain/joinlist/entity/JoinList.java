@@ -8,6 +8,7 @@ import jakarta.persistence.*;
 import lombok.*;
 
 import static com.soma.domain.joinlist.entity.JoinType.HOST;
+import static com.soma.domain.joinlist.entity.JoinType.MEMBER;
 
 
 @Getter
@@ -50,7 +51,7 @@ public class JoinList extends BaseEntity {
         return JoinList.builder()
                 .member(member)
                 .group(group)
-                .joinType(HOST)
+                .joinType(MEMBER)
                 .build();
     }
 
