@@ -18,10 +18,10 @@ public class GroupCreateRequest {
     @Size(min = 1, max = 6, message = "그룹 이름은 1자 이상 6자 이하로 입력해주세요.")
     private String groupName;
 
-    public Group toEntity(LocalDate startDate) {
+    public Group toEntity(LocalDate startDate, String groupCode) {
         return Group.builder()
                 .name(groupName)
-                .code(GroupCode.create6Number())
+                .code(groupCode)
                 .startDate(startDate)
                 .build();
     }

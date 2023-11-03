@@ -1,13 +1,20 @@
 package com.soma.domain.group.service;
 
-import com.soma.common.constant.Status;
+import static com.soma.common.constant.Status.ACTIVE;
+
 import com.soma.domain.exercise_record.dto.response.ExerciseCheckListResponse;
 import com.soma.domain.exercise_record.entity.ExerciseRecord;
 import com.soma.domain.exercise_record.repository.ExerciseRecordRepository;
 import com.soma.domain.group.dto.request.GroupCreateRequest;
 import com.soma.domain.group.dto.request.GroupJoinRequest;
-import com.soma.domain.group.dto.response.*;
+import com.soma.domain.group.dto.response.GroupAbsenteeResponse;
+import com.soma.domain.group.dto.response.GroupAbsenteeUser;
+import com.soma.domain.group.dto.response.GroupListResponse;
+import com.soma.domain.group.dto.response.GroupNameResponse;
+import com.soma.domain.group.dto.response.GroupTimeStaticsResponse;
+import com.soma.domain.group.dto.response.UserTimeStaticsResponse;
 import com.soma.domain.group.entity.Group;
+import com.soma.domain.group.entity.GroupCode;
 import com.soma.domain.group.repository.GroupRepository;
 import com.soma.domain.joinlist.entity.JoinList;
 import com.soma.domain.joinlist.repository.JoinListRepository;
@@ -16,17 +23,21 @@ import com.soma.domain.member.repository.MemberRepository;
 import com.soma.exception.group.AlreadyJoinedGroupException;
 import com.soma.exception.group.GroupNotFoundException;
 import com.soma.exception.member.MemberNotFoundException;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Slice;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.util.*;
-import java.util.stream.Collectors;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -40,18 +51,25 @@ public class GroupService {
 
     @Transactional
     public GroupNameResponse create(GroupCreateRequest request, String email) {
-        Group group = request.toEntity(LocalDate.now());
+        Group group = request.toEntity(LocalDate.now(), createUnduplicateGroupCode(GroupCode.create6Number()));
         groupRepository.save(group);
         System.out.println(group.getCode());
-        Member member = memberRepository.findByEmailAndStatus(email, Status.ACTIVE).orElseThrow(MemberNotFoundException::new);
+        Member member = memberRepository.findByEmailAndStatus(email, ACTIVE).orElseThrow(MemberNotFoundException::new);
         joinListRepository.save(JoinList.createHostJoinList(member, group));
         return GroupNameResponse.toDto(group);
+    }
+
+    public String createUnduplicateGroupCode(String groupCode) {
+        while(groupRepository.existsByCodeAndStatus(groupCode, ACTIVE)){ // 코드 중복 검사 불통과시 코드 재발급
+            groupCode = GroupCode.create6Number();
+        }
+        return groupCode;
     }
 
     @Transactional
     public GroupNameResponse join(GroupJoinRequest request, String email) {
         Group group = groupRepository.findByCode(request.getGroupCode()).orElseThrow(GroupNotFoundException::new);
-        Member member = memberRepository.findByEmailAndStatus(email, Status.ACTIVE).orElseThrow(MemberNotFoundException::new);
+        Member member = memberRepository.findByEmailAndStatus(email, ACTIVE).orElseThrow(MemberNotFoundException::new);
         if(!joinListRepository.existsByGroupAndMember(group, member)){
             joinListRepository.save(JoinList.createMemberJoinList(member, group));
         }else{
@@ -62,7 +80,7 @@ public class GroupService {
     }
 
     public Slice<GroupListResponse> readAll(Long groupIdCursor, Integer size, String email) {
-        Member member = memberRepository.findByEmailAndStatus(email, Status.ACTIVE).orElseThrow(MemberNotFoundException::new);
+        Member member = memberRepository.findByEmailAndStatus(email, ACTIVE).orElseThrow(MemberNotFoundException::new);
         if (groupIdCursor == null){
             return groupRepository.findFirstGroupList(member, PageRequest.of(0, size));
         }else{
