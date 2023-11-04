@@ -10,6 +10,7 @@ public enum ErrorCode {
     /* Member */
     MEMBER_NOT_FOUND_EXCEPTION(-1100, "사용자가 존재하지 않습니다."),
     MEMBER_ALREADY_EXIST(-1101, "이미 해당 이름을 가진 사용자가 존재합니다."),
+    EXCEED_DAILY_EXERCISE_GOAL__EXCEPTION(-1102, "하루 운동 목표 시간이 24시간을 초과합니다."),
 
     /* Group */
     ALREADY_JOINED_GROUP_EXCEPTION(-1200, "이미 가입한 그룹입니다."),
