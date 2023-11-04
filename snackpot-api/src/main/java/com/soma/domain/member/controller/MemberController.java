@@ -1,5 +1,6 @@
 package com.soma.domain.member.controller;
 
+import com.soma.domain.member.dto.request.UpdateDailyGoalTimeRequest;
 import com.soma.domain.member.service.MemberService;
 import com.soma.util.response.Response;
 import io.swagger.v3.oas.annotations.Operation;
@@ -10,10 +11,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseStatus;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @Slf4j
 @Tag(name = "Member", description = "멤버 API")
@@ -35,5 +33,13 @@ public class MemberController {
     @GetMapping("/my")
     public Response readMyInfo(@AuthenticationPrincipal UserDetails loginUser) {
         return Response.success(memberService.readMyInfo(loginUser.getUsername()));
+    }
+
+    @Operation(summary = "운동 목표 시간 수정", description = "운동 목표 시간을 수정합니다.", security = { @SecurityRequirement(name = "Authorization") })
+    @ResponseStatus(HttpStatus.OK)
+    @PatchMapping("/dailyGoalTime")
+    public Response updateDailyGoalTime(@RequestBody UpdateDailyGoalTimeRequest request, @AuthenticationPrincipal UserDetails loginUser) {
+        memberService.updateDailyGoalTime(request, loginUser.getUsername());
+        return Response.success();
     }
 }

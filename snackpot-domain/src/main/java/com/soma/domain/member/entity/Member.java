@@ -41,6 +41,10 @@ public class Member extends BaseEntity {
         active();
     }
 
+    public void updateDailyGoalTime(Integer dailyGoalTime) {
+        this.dailyGoalTime = dailyGoalTime;
+    }
+
     public void updateFcmToken(String fcmToken){
         this.fcmToken = fcmToken;
     }

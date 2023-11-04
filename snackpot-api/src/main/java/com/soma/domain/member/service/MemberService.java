@@ -3,11 +3,13 @@ package com.soma.domain.member.service;
 import com.soma.common.constant.Status;
 import com.soma.domain.exercise_record.entity.ExerciseRecord;
 import com.soma.domain.exercise_record.repository.ExerciseRecordRepository;
+import com.soma.domain.member.dto.request.UpdateDailyGoalTimeRequest;
 import com.soma.domain.member.dto.response.DailyGoalTime;
 import com.soma.domain.member.dto.response.MemberMyInfoResponse;
 import com.soma.domain.member.dto.response.MemberTotalNumResponse;
 import com.soma.domain.member.entity.Member;
 import com.soma.domain.member.repository.MemberRepository;
+import com.soma.exception.member.ExceedDailyExerciseGoalException;
 import com.soma.exception.member.MemberNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -63,5 +65,18 @@ public class MemberService {
         LocalDateTime today = LocalDateTime.now().withHour(0).withMinute(0).withSecond(0);// 오늘 자정
         int dayOfWeek = today.getDayOfWeek().getValue(); // 오늘 요일(숫자), 월(1), 일(7)
         return today.plusDays(8-dayOfWeek).withHour(0).withMinute(0).withSecond(0).withNano(0);
+    }
+
+    @Transactional
+    public void updateDailyGoalTime(UpdateDailyGoalTimeRequest request, String email) {
+
+        Member member = memberRepository.findByEmailAndStatus(email, Status.ACTIVE).orElseThrow(MemberNotFoundException::new);
+
+        // 하루 운동 목표 시간이 24시간을 초과한다면
+        if (request.getDailyGoalTime() > 1440) {
+            throw new ExceedDailyExerciseGoalException();
+        }
+
+        member.updateDailyGoalTime(request.getDailyGoalTime());
     }
 }
