@@ -79,4 +79,10 @@ public class MemberService {
 
         member.updateDailyGoalTime(request.getDailyGoalTime());
     }
+
+    @Transactional
+    public void delete(String email) {
+        Member member = memberRepository.findByEmailAndStatus(email, Status.ACTIVE).orElseThrow(MemberNotFoundException::new);
+        member.inActive();
+    }
 }

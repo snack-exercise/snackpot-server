@@ -42,4 +42,12 @@ public class MemberController {
         memberService.updateDailyGoalTime(request, loginUser.getUsername());
         return Response.success();
     }
+
+    @Operation(summary = "회원 탈퇴", description = "회원을 탈퇴합니다.", security = { @SecurityRequirement(name = "Authorization") })
+    @ResponseStatus(HttpStatus.OK)
+    @DeleteMapping("")
+    public Response delete(@AuthenticationPrincipal UserDetails loginUser) {
+        memberService.delete(loginUser.getUsername());
+        return Response.success();
+    }
 }
