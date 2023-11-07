@@ -5,6 +5,7 @@ spring:
         - local
       dev-env:
         - dev
+        - logging
       prod-blue-env:
         - prod
         - blue
@@ -14,7 +15,6 @@ spring:
     include:
       - jwt
       - fcm
-      - logging
       - prometheus
 
 ---
