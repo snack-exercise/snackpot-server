@@ -58,6 +58,8 @@ services:
       - 3000:3000
     depends_on:
       - prometheus
+    volumes:
+      - ./grafana-volume:/var/lib/grafana
     networks:
       - snackpot_net
     restart: always
