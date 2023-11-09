@@ -3,6 +3,7 @@ package com.soma.domain.notification.controller;
 import com.soma.domain.notification.dto.request.NotificationCreateRequest;
 import com.soma.domain.notification.service.NotificationService;
 import com.soma.util.response.Response;
+import io.micrometer.core.annotation.Timed;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -20,6 +21,7 @@ import org.springframework.web.bind.annotation.*;
 public class NotificationController {
     private final NotificationService notificationService;
 
+    @Timed("CreateNotificationTimer")
     @Operation(summary = "콕 찌르기", description = "한 명의 회원에게 콕 찌르기 알림을 전송합니다.", security = { @SecurityRequirement(name = "Authorization") })
     @ResponseStatus(HttpStatus.OK)
     @PostMapping()
