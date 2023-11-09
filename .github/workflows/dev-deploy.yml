@@ -61,7 +61,7 @@ jobs:
         run: |
           cd ./snackpot-api/src/main/resources
           touch ./application-prometheus.yml
-          echo "${{ secrets.APPLICATION_PROMETHEUS_YML }}" > ./application-prometheus.yml
+          echo "${{ secrets.APPLICATION_PROMETHEUS_YML }}" | base64 --decode > ./application-prometheus.yml
         shell: bash
 
       ## (3-6) prometheus.yml 생성
