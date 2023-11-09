@@ -2,6 +2,7 @@ package com.soma.domain.exercise_like.controller;
 
 import com.soma.domain.exercise_like.service.ExerciseLikeService;
 import com.soma.util.response.Response;
+import io.micrometer.core.annotation.Timed;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -20,6 +21,7 @@ import org.springframework.web.bind.annotation.*;
 public class ExerciseLikeController {
     private final ExerciseLikeService exerciseLikeService;
 
+    @Timed("AddLikeExerciseTimer")
     @Operation(summary = "운동 좋아요", description = "운동 좋아요를 생성합니다.", security = {@SecurityRequirement(name = "Authorization")})
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping
@@ -28,6 +30,7 @@ public class ExerciseLikeController {
         return Response.success();
     }
 
+    @Timed("DeleteLikeExerciseTimer")
     @Operation(summary = "운동 좋아요 취소", description = "운동 좋아요를 취소합니다.", security = {@SecurityRequirement(name = "Authorization")})
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @DeleteMapping

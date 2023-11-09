@@ -5,6 +5,7 @@ import com.soma.domain.exercise.dto.request.ExerciseFinishRequest;
 import com.soma.domain.exercise.dto.request.ExerciseReadCondition;
 import com.soma.domain.exercise.service.ExerciseService;
 import com.soma.util.response.Response;
+import io.micrometer.core.annotation.Timed;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.enums.ParameterIn;
@@ -23,6 +24,7 @@ import java.util.List;
 public class ExerciseController {
     private final ExerciseService exerciseService;
 
+    @Timed("ReadAllExerciseTimer")
     @Operation(summary = "운동 목록 조회", description = "주어진 조건에 따라 운동 목록을 조회합니다.", security = { @SecurityRequirement(name = "Authorization") })
     @Parameter(name = "cursorId", description = "마지막으로 조회한 운동 ID, 맨 처음조회시에는 쿼리파라미터 작성 안해도 됩니다.", required = false,  in = ParameterIn.QUERY)
     @Parameter(name = "like", description = "좋아요 조건입니다.", required = false,  in = ParameterIn.QUERY)
@@ -45,6 +47,7 @@ public class ExerciseController {
         }
     }
 
+    @Timed("RecordExerciseTimer")
     @Operation(summary = "운동 종료", description = "운동 종료, 운동 기록을 생성합니다.", security = { @SecurityRequirement(name = "Authorization") })
     @PostMapping("/finish")
     @ResponseStatus(HttpStatus.CREATED)
@@ -54,6 +57,7 @@ public class ExerciseController {
     }
 
 
+    @Timed("ReadExerciseDetailTimer")
     @Operation(summary = "운동 상세 조회", description = "주어진 운동 id로 운동을 조회합니다.", security = { @SecurityRequirement(name = "Authorization") })
     @Parameter(name = "exerciseId", description = "조회할 운동 id 입니다.", required = true,  in = ParameterIn.PATH)
     @GetMapping("/{exerciseId}")
