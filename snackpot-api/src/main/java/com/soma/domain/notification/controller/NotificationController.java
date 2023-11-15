@@ -7,6 +7,7 @@ import io.micrometer.core.annotation.Timed;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -25,7 +26,7 @@ public class NotificationController {
     @Operation(summary = "콕 찌르기", description = "한 명의 회원에게 콕 찌르기 알림을 전송합니다.", security = { @SecurityRequirement(name = "Authorization") })
     @ResponseStatus(HttpStatus.OK)
     @PostMapping()
-    public Response create(@RequestBody NotificationCreateRequest request, @AuthenticationPrincipal UserDetails loginUser){
+    public Response create(@RequestBody @Valid NotificationCreateRequest request, @AuthenticationPrincipal UserDetails loginUser){
         notificationService.create(request, loginUser.getUsername());
         return Response.success();
     }
