@@ -45,7 +45,7 @@ public class NotificationService {
     public void create(NotificationCreateRequest request, String email) {
         log.error("request.getFcmToken: {}", request.getFcmToken());
         log.error("request.getGroupId: {}", request.getGroupId());
-        log.error("request.getGroupId: {}", request.getGroupId());
+        log.error("request.getToUserId: {}", request.getToUserId());
         Group group = groupRepository.findById(request.getGroupId()).orElseThrow(GroupNotFoundException::new);
         Member fromMember = memberRepository.findByEmailAndStatus(email, ACTIVE).orElseThrow(MemberNotFoundException::new);
         fromMember.updateFcmToken(request.getFcmToken());
